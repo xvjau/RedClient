@@ -1,11 +1,46 @@
 project(RedClient)
-cmake_minimum_required(VERSION 2.6)
-find_package(Qt4 REQUIRED)
+cmake_minimum_required(VERSION 2.8)
+find_package(Qt5 COMPONENTS Gui Widgets Qml Quick Sql)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_AUTOMOC ON)
 
-set(RedClient_SRCS RedClient.cpp main.cpp)
-qt4_automoc(${RedClient_SRCS})
+add_definitions(${Qt5Widgets_DEFINITIONS} -std=c++11 -fPIC -fPIE -Wall -Wextra)
+
+include_directories(${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Qml_INCLUDE_DIRS} ${Qt5Quick_INCLUDE_DIRS} ${Qt5Sql_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+
+FILE(GLOB QML_FILES "qml/*.qml")
+
+add_subdirectory(qml)
+
+add_custom_command(
+    OUTPUT qml.cpp
+
+    COMMAND echo ${QML_FILES} > ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+
+    COMMAND sed 's/\\s/\\n/g' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+    COMMAND sed 's/.*\\///g' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+    COMMAND sed 's/^/\\t\\t\\<file\\>qml\\//' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+    COMMAND sed 's/$$/\\<\\/file\\>/' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+
+    COMMAND echo -e '<RCC>\\n\\t<qresource prefix=\"/\">' > qml.qrc
+    COMMAND cat ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp >> qml.qrc
+    COMMAND echo -e '\\t</qresource>\\n</RCC>' >> qml.qrc
+
+    COMMAND rcc qml.qrc > ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp
+
+    COMMAND rm qml.qrc ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
+
+    DEPENDS ${QML_FILES}
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+
+    COMMENT "QML Resources"
+)
+
+set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp main.cpp)
+
 add_executable(RedClient ${RedClient_SRCS})
-target_link_libraries(RedClient ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
+target_link_libraries(RedClient ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES})
+
 install(TARGETS RedClient RUNTIME DESTINATION bin)
