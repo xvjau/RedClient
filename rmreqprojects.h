@@ -24,7 +24,7 @@
 #include "rmrequest.h"
 #include "rmproject.h"
 
-#include <QMap>
+#include <unordered_map>
 
 class RMReqProjects : public RMRequest
 {
@@ -37,7 +37,7 @@ protected:
     
     virtual void replyFinished(QNetworkReply* reply);
     
-    QMap<int, RMProject> m_projects;
+    std::unordered_map<int, RMProject> m_projects;
 };
 
 #endif // RMREQPROJECTS_H

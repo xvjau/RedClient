@@ -22,18 +22,37 @@
 #define RMPROJECTS_H
 
 #include <QObject>
+#include <QDateTime>
 
 class RedMineManager;
+class QJsonValueRef;
 
 class RMProject : public QObject
 {
     Q_OBJECT
 
-private:
-    explicit RMProject(RedMineManager *manager = nullptr, QObject *parent = nullptr);
+public:
+    RMProject(RMProject &&other);
+    RMProject(const QJsonValueRef &json, RedMineManager *manager, QObject *parent = nullptr);
+    explicit RMProject(RedMineManager *manager, QObject *parent = nullptr);
     
 protected:
     RedMineManager *m_manager;
+    
+    int         m_id;
+    QDateTime   m_createdOn;
+    QDateTime   m_updatedOn;
+    QString     m_identifier;
+    QString     m_name;
+    QString     m_description;
+    
+public:
+    int         id() const { return m_id; }
+    QDateTime   createdOn() const { return m_createdOn; }
+    QDateTime   updatedOn() const { return m_updatedOn; }
+    QString     identifier() const { return m_identifier; }
+    QString     name() const { return m_name; }
+    QString     description() const { return m_description; }
 };
 
 #endif // RMPROJECTS_H

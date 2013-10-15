@@ -20,11 +20,39 @@
 
 #include "rmproject.h"
 
+#include <QJsonValueRef>
+#include <QJsonObject>
+
+#include <cassert>
+
 static void __registerClass() __attribute__((constructor));
 
 static void __registerClass() 
 {
     qRegisterMetaType<RMProject*>("RMProject");
+}
+
+RMProject::RMProject(RMProject&& other): 
+    QObject(other.parent()),
+    m_manager(other.m_manager)
+{
+
+}
+
+RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject* parent): 
+    QObject(parent),
+    m_manager(manager)
+{
+    assert(json.isObject());
+    
+    QJsonObject obj = json.toObject();
+    
+    m_id = obj.value("id").toDouble();
+    m_createdOn = QDateTime::fromString(obj.value("created_on").toString());
+    m_updatedOn = QDateTime::fromString(obj.value("updated_on").toString());
+    m_identifier = obj.value("identifier").toString();
+    m_name = obj.value("name").toString();
+    m_description = obj.value("description").toString();
 }
 
 RMProject::RMProject(RedMineManager *manager, QObject *parent):
