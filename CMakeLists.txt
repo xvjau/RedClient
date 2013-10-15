@@ -37,9 +37,11 @@ add_custom_command(
     COMMENT "QML Resources"
 )
 
-set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp main.cpp)
+set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp qml/login.cpp)
 
-add_executable(RedClient ${RedClient_SRCS})
+qt5_wrap_ui(UI_SRCS qml/login.ui)
+
+add_executable(RedClient ${RedClient_SRCS} ${UI_SRCS})
 
 target_link_libraries(RedClient ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES})
 

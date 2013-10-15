@@ -1,11 +1,15 @@
 #include <QApplication>
 
+#include "redminemanager.h"
+
 #include <QQuickWindow>
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QQmlContext>
 
 #include <QDebug>
+
+#include "qml/login.h"
 
 QQuickWindow* createAndShow(QQmlEngine &_engine, const QUrl &_url)
 {
@@ -39,17 +43,22 @@ int main(int argc, char** argv)
     
     app.setOrganizationName("B1tF0rge");
     app.setOrganizationDomain("bitforge.com.br");
-    app.setApplicationName("Red Client");
+    app.setApplicationName("RedClient");
     app.setApplicationDisplayName("Red Client");
     
     try
     {
+        RedMineManager remineManager(QUrl("https://projects.bitforge.com.br"));
+        
         QQmlEngine engine;
         QObject::connect(&engine, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
         
         //engine.rootContext()->setContextProperty("hlrClient", &hlrClient);
         
         createAndShow(engine, QUrl("qrc:/qml/MainWindow.qml"));
+        
+        Login *login = new Login(&remineManager);
+        login->exec();
         
         return app.exec();
     }
