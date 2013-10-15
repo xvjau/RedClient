@@ -9,8 +9,6 @@
 
 #include <QDebug>
 
-#include "qml/login.h"
-
 QQuickWindow* createAndShow(QQmlEngine &_engine, const QUrl &_url)
 {
     QQmlComponent *component = new QQmlComponent(&_engine);
@@ -57,8 +55,7 @@ int main(int argc, char** argv)
         
         createAndShow(engine, QUrl("qrc:/qml/MainWindow.qml"));
         
-        Login *login = new Login(&remineManager);
-        login->exec();
+        remineManager.listProjects();
         
         return app.exec();
     }

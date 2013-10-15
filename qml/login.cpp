@@ -22,18 +22,8 @@
 
 #include "../redminemanager.h"
 
-Login::Login(RedMineManager* accessManager, QWidget* parent, Qt::WindowFlags f): 
-    QDialog(parent, f),
-    m_accessManager(accessManager)
+Login::Login(QWidget* parent, Qt::WindowFlags f): 
+    QDialog(parent, f)
 {
     setupUi(this);
-    
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(onLoginPressed()));
-}
-
-void Login::onLoginPressed()
-{
-    m_accessManager->login(leLogin->text(), lePassword->text());
-    m_accessManager->listProjects();
-    accept();
 }

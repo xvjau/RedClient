@@ -35,14 +35,11 @@ class Login : public QDialog, public Ui::Login
     Q_OBJECT
 
 public:
-    explicit Login(RedMineManager *accessManager, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
-
+    explicit Login(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
     
-private:
-    RedMineManager *m_accessManager;
-    
-protected slots:
-    void onLoginPressed();
+public:
+    QString login() const { return leLogin->text(); }
+    QString password() const { return lePassword->text(); }
 };
 
 #endif // LOGIN_H

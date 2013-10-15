@@ -97,5 +97,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Login</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>16</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

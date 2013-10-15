@@ -40,11 +40,7 @@ public:
 private:
     QUrl                    m_baseUrl;
     QNetworkAccessManager   m_accessManager;
-    
-    bool                    m_loggedIn = false;
-    QString                 m_login;
-    QString                 m_password;
-    
+        
 protected slots:
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     
@@ -52,12 +48,10 @@ signals:
     void responseListProjects(QList<RMProject> *projects);
     
 public:
-    bool loggedIn() { return m_loggedIn; }
     const QUrl& baseUrl() const { return m_baseUrl; }
     QNetworkAccessManager   *accessManager() { return &m_accessManager; }
     
 public slots:
-    void login(QString login, QString password);
     void listProjects();
 };
 

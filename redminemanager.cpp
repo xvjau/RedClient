@@ -22,7 +22,10 @@
 
 #include "rmreqprojects.h"
 
+#include "qml/login.h"
+
 #include <QAuthenticator>
+#include <QApplication>
 
 static void __registerClass() __attribute__((constructor));
 
@@ -43,14 +46,12 @@ RedMineManager::~RedMineManager()
 
 void RedMineManager::authenticationRequired(QNetworkReply* reply, QAuthenticator* authenticator)
 {
-    authenticator->setUser(m_login);
-    authenticator->setPassword(m_password);
-}
-
-void RedMineManager::login(QString login, QString password)
-{
-    m_login = std::move(login);
-    m_password = std::move(password);
+    Login dlg;
+    if (dlg.exec() == QDialog::Rejected)
+        QApplication::quit();
+    
+    authenticator->setUser(dlg.login());
+    authenticator->setPassword(dlg.password());
 }
 
 void RedMineManager::listProjects()
