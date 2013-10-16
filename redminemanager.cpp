@@ -66,7 +66,7 @@ void RedMineManager::listProjects()
 {  
     RMReqProjects *req = new RMReqProjects(this);
     
-    connect(req, SIGNAL(recievedProjectList(ProjectMapPtr)), this, SIGNAL(recievedProjectList(ProjectMapPtr)));
+    connect(req, SIGNAL(recievedProjectList(ProjectVectorPtr)), this, SIGNAL(recievedProjectList(ProjectVectorPtr)));
     
     req->start();
 }

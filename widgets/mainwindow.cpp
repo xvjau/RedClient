@@ -29,8 +29,8 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     ui = new Ui::MainWindow();
     ui->setupUi(this);
        
-    connect(m_manager, SIGNAL(recievedProjectList(ProjectMapPtr)), &m_projectsModel, SLOT(setProjectData(ProjectMapPtr)));
-    connect(m_manager, SIGNAL(recievedProjectList(ProjectMapPtr)), this, SLOT(setProjectData(ProjectMapPtr)));
+    connect(m_manager, SIGNAL(recievedProjectList(ProjectVectorPtr)), &m_projectsModel, SLOT(setProjectData(ProjectVectorPtr)));
+    connect(m_manager, SIGNAL(recievedProjectList(ProjectVectorPtr)), this, SLOT(setProjectData(ProjectVectorPtr)));
     
     m_manager->listProjects();
 }
