@@ -31,8 +31,8 @@ public:
     explicit RMReqProjects(RedMineManager *manager);
     
 protected:
-    virtual QUrl buildUrl();
-    virtual void replyFinished(QNetworkReply* reply);
+    virtual QUrl buildUrl() override;
+    virtual void replyFinished(QNetworkReply* reply) override;
     
 signals:
     void recievedProjectList(ProjectMapPtr projects);
