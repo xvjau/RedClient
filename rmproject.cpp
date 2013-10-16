@@ -19,6 +19,7 @@
  */
 
 #include "rmproject.h"
+#include "globals.h"
 
 #include <QJsonValueRef>
 #include <QJsonObject>
@@ -71,6 +72,8 @@ RMProject& RMProject::operator=(const RMProject& other)
     m_name = other.m_name;
     m_description = other.m_description;
     m_parentProjectId = other.m_parentProjectId;
+    
+    return *this;
 }
 
 RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject* parent): 
@@ -82,8 +85,8 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     QJsonObject obj = json.toObject();
     
     m_id = obj.value("id").toDouble();
-    m_createdOn = QDateTime::fromString(obj.value("created_on").toString());
-    m_updatedOn = QDateTime::fromString(obj.value("updated_on").toString());
+    m_createdOn = jsonDate(obj.value("created_on").toString());
+    m_updatedOn = jsonDate(obj.value("updated_on").toString());
     m_identifier = obj.value("identifier").toString();
     m_name = obj.value("name").toString();
     m_description = obj.value("description").toString();
