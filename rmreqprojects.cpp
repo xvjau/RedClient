@@ -21,6 +21,8 @@
 #include "rmreqprojects.h"
 #include "redminemanager.h"
 
+#include <memory>
+
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -43,7 +45,7 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
 {
     RMRequest::replyFinished(reply);
     
-    ProjectMapPtr projects(new std::unordered_map<int, RMProject>());
+    auto projects = std::make_shared<std::vector<RMProject>>();
     
     QJsonObject obj = m_jsonDocument.object();
     
@@ -56,9 +58,7 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
         for(auto project : list)
         {
             RMProject p(project, m_manager);
-            int id = p.id();
-            
-            projects->insert(std::make_pair(id, std::move(p)));
+            projects->push_back(std::move(p));
         }
     }
     

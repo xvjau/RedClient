@@ -31,7 +31,20 @@ static void __registerClass() __attribute__((constructor));
 static void __registerClass() 
 {
     qRegisterMetaType<RMProject*>("RMProject");
-    qRegisterMetaType<ProjectMapPtr*>("ProjectMapPtr");
+    qRegisterMetaType<ProjectVectorPtr*>("ProjectVectorPtr");
+}
+
+RMProject::RMProject(const RMProject& other): 
+    QObject(other.parent()),
+    m_manager(other.m_manager),
+    m_id(other.m_id),
+    m_createdOn(other.m_createdOn),
+    m_updatedOn(other.m_updatedOn),
+    m_identifier(other.m_identifier),
+    m_name(other.m_name),
+    m_description(other.m_description),
+    m_parentProjectId(other.m_parentProjectId)
+{
 }
 
 RMProject::RMProject(RMProject&& other): 
@@ -45,6 +58,19 @@ RMProject::RMProject(RMProject&& other):
     m_description(std::move(other.m_description)),
     m_parentProjectId(other.m_parentProjectId)
 {
+}
+
+RMProject& RMProject::operator=(const RMProject& other)
+{
+    setParent(other.parent());
+    m_manager = other.m_manager;
+    m_id = other.m_id;
+    m_createdOn = other.m_createdOn;
+    m_updatedOn = other.m_updatedOn;
+    m_identifier = other.m_identifier;
+    m_name = other.m_name;
+    m_description = other.m_description;
+    m_parentProjectId = other.m_parentProjectId;
 }
 
 RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject* parent): 

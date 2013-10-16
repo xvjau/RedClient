@@ -51,7 +51,7 @@ add_custom_command(
     COMMENT "QML Resources"
 )
 
-set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp abstracttreemodel.cpp projectsmodel.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp login.cpp)
+set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp abstracttreemodel.cpp projectsmodel.cpp rmrequest.cpp rmreqprojects.cpp rmreqissues.cpp redminemanager.cpp main.cpp rmproject.cpp rmissue.cpp login.cpp)
 
 qt5_wrap_ui(UI_SRCS login.ui)
 

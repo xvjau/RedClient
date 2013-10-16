@@ -19,6 +19,9 @@
  */
 
 #include "projectsmodel.h"
+
+#include <unordered_map>
+
 #include <cassert>
 
 class ProjectsModelItem: public AbstractModelItem 
@@ -64,12 +67,12 @@ ProjectsModel::ProjectsModel(QObject* parent):
 {
 }
 
-void ProjectsModel::setProjectData(ProjectMapPtr projectMap)
+void ProjectsModel::setProjectData(ProjectVectorPtr projectList)
 {
     // clear data
     m_rootItem = std::make_shared<AbstractModelItem>();
     
-    std::unordered_map<int, RMProject> &data = *projectMap.data();
+    auto &data = *projectList.get();
     
     std::unordered_map<int, std::shared_ptr<AbstractModelItem>> cache;
     
@@ -81,9 +84,9 @@ void ProjectsModel::setProjectData(ProjectMapPtr projectMap)
         
         DO_NEXT:
         
-        if (it->second.parentProjectId())
+        if (it->parentProjectId())
         {
-            auto itParent = cache.find(it->second.parentProjectId());
+            auto itParent = cache.find(it->parentProjectId());
             if (itParent != cache.end())
                 parent = itParent->second;
             else
@@ -96,12 +99,12 @@ void ProjectsModel::setProjectData(ProjectMapPtr projectMap)
         else
             parent = m_rootItem;
         
-        auto child = std::make_shared<ProjectsModelItem>(std::move(it->second), parent.get());
+        auto child = std::make_shared<ProjectsModelItem>(std::move(*it), parent.get());
         child->m_row = parent->m_children.size();
         
         parent->m_children.push_back(child);
         
-        cache.insert(std::make_pair(it->second.id(), child));
+        cache.insert(std::make_pair(it->id(), child));
         
         data.erase(it);
     }

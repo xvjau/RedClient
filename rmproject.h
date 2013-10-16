@@ -23,21 +23,24 @@
 
 #include <QObject>
 #include <QDateTime>
-#include <unordered_map>
-#include <QSharedPointer>
+#include <vector>
+#include <memory>
 
 class RedMineManager;
 class QJsonValueRef;
 class RMProject;
 
-typedef QSharedPointer<std::unordered_map<int, RMProject>> ProjectMapPtr;
+typedef std::shared_ptr<std::vector<RMProject>> ProjectVectorPtr;
 
 class RMProject : public QObject
 {
     Q_OBJECT
 
 public:
+    RMProject(const RMProject &other);
     RMProject(RMProject &&other);
+    RMProject& operator=(const RMProject &other);
+    
     RMProject(const QJsonValueRef &json, RedMineManager *manager, QObject *parent = nullptr);
     explicit RMProject(RedMineManager *manager, QObject *parent = nullptr);
     
