@@ -26,6 +26,7 @@
 
 #include <QAuthenticator>
 #include <QApplication>
+#include <QSettings>
 
 static void __registerClass() __attribute__((constructor));
 
@@ -38,6 +39,13 @@ RedMineManager::RedMineManager(QUrl url):
     m_baseUrl(std::move(url))
 {
     connect(&m_accessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
+    
+    QSettings settings;
+    settings.beginGroup("RedMine");
+    
+    if (settings.contains("AccessKey"))
+        m_extraHeaders.insert("X-Redmine-API-Key", settings.value("AccessKey").toString());
+
 }
 
 RedMineManager::~RedMineManager()

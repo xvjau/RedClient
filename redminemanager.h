@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QUrl>
+#include <QMap>
 #include <QNetworkAccessManager>
 
 #include "rmproject.h"
@@ -38,6 +39,8 @@ public:
     virtual ~RedMineManager();
     
 private:
+    QMap<QString, QString>  m_extraHeaders;
+    
     QUrl                    m_baseUrl;
     QNetworkAccessManager   m_accessManager;
         
@@ -48,6 +51,7 @@ signals:
     void responseListProjects(QList<RMProject> *projects);
     
 public:
+    const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }
     const QUrl& baseUrl() const { return m_baseUrl; }
     QNetworkAccessManager   *accessManager() { return &m_accessManager; }
     
