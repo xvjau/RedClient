@@ -108,7 +108,8 @@ void RMRequest::start()
     
     QNetworkRequest request;
     request.setUrl(buildUrl());
-    request.setRawHeader("User-Agent", QApplication::applicationName().toUtf8());
+    request.setHeader(QNetworkRequest::UserAgentHeader,   QApplication::applicationName().toUtf8());
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     
     auto &extraHeaders = m_manager->extraHeaders();
     if (!extraHeaders.isEmpty())
@@ -118,7 +119,7 @@ void RMRequest::start()
             request.setRawHeader(it.key().toUtf8(), it.value().toUtf8());
         }
     }
-    
+       
     m_reply = m_manager->accessManager()->get(request);
     connect(m_reply, SIGNAL(readyRead()), this, SLOT(requestReadyRead()));
     connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(requestError(QNetworkReply::NetworkError)));
