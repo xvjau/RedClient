@@ -35,7 +35,7 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     m_manager->listProjects();
 }
 
-void MainWindow::setProjectData(ProjectMapPtr )
+void MainWindow::setProjectData(ProjectVectorPtr)
 {
     ui->tvProjects->setModel(&m_projectsModel);
     

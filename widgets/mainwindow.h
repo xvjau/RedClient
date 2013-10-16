@@ -46,7 +46,7 @@ private:
     ProjectsModel m_projectsModel;
 
 private slots:
-    void setProjectData(ProjectMapPtr);
+    void setProjectData(ProjectVectorPtr);
 };
 
 #endif // MAINWINDOW_H
