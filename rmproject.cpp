@@ -48,7 +48,7 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     
     QJsonObject obj = json.toObject();
     
-    qDebug() << obj;
+    qDebug() << "Project " << obj;
     
     m_id = obj.value("id").toDouble();
     m_createdOn = QDateTime::fromString(obj.value("created_on").toString());
@@ -56,6 +56,12 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     m_identifier = obj.value("identifier").toString();
     m_name = obj.value("name").toString();
     m_description = obj.value("description").toString();
+    
+    auto parentProj = obj.value("parent");
+    if (parentProj.isObject())
+    {
+        m_parent = parentProj.toObject().value("id").toDouble();
+    }
 }
 
 RMProject::RMProject(RedMineManager *manager, QObject *parent):

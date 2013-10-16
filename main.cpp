@@ -46,16 +46,14 @@ int main(int argc, char** argv)
     
     try
     {
-        RedMineManager remineManager(QUrl("https://projects.bitforge.com.br"));
+        RedMineManager redmineManager(QUrl("https://projects.bitforge.com.br"));
         
         QQmlEngine engine;
         QObject::connect(&engine, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
         
-        //engine.rootContext()->setContextProperty("hlrClient", &hlrClient);
+        engine.rootContext()->setContextProperty("redmineManager", &redmineManager);
         
         createAndShow(engine, QUrl("qrc:/qml/MainWindow.qml"));
-        
-        remineManager.listProjects();
         
         return app.exec();
     }

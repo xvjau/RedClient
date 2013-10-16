@@ -49,15 +49,16 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
     
     auto it = obj.find("projects");
     
-    assert(it != obj.end());
-    
-    auto list = it.value().toArray();
-    
-    for(auto project : list)
+    if(it != obj.end())
     {
-        RMProject p(project, m_manager);
-        int id = p.id();
+        auto list = it.value().toArray();
         
-        m_projects.insert(std::make_pair(id, std::move(p)));
+        for(auto project : list)
+        {
+            RMProject p(project, m_manager);
+            int id = p.id();
+            
+            m_projects.insert(std::make_pair(id, std::move(p)));
+        }
     }
 }

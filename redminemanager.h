@@ -56,7 +56,7 @@ public:
     QNetworkAccessManager   *accessManager() { return &m_accessManager; }
     
 public slots:
-    void listProjects();
+    Q_INVOKABLE void listProjects();
 };
 
 #endif // REDMINEMANAGER_H

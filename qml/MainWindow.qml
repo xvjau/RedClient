@@ -23,4 +23,8 @@ ApplicationWindow {
 //             }
         }
     }
+
+    onAfterRendering: {
+        redmineManager.listProjects()
+    }
 }

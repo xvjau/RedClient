@@ -46,6 +46,8 @@ protected:
     QString     m_name;
     QString     m_description;
     
+    int         m_parent = -1;
+    
 public:
     int         id() const { return m_id; }
     QDateTime   createdOn() const { return m_createdOn; }
