@@ -10,8 +10,6 @@ include_directories(${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Qml_I
 
 FILE(GLOB QML_FILES "qml/*.qml")
 
-add_subdirectory(qml)
-
 add_custom_command(
     OUTPUT qml.cpp
 
@@ -37,9 +35,9 @@ add_custom_command(
     COMMENT "QML Resources"
 )
 
-set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp qml/login.cpp)
+set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp login.cpp)
 
-qt5_wrap_ui(UI_SRCS qml/login.ui)
+qt5_wrap_ui(UI_SRCS login.ui)
 
 add_executable(RedClient ${RedClient_SRCS} ${UI_SRCS})
 

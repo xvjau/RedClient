@@ -22,7 +22,7 @@
 
 #include "rmreqprojects.h"
 
-#include "qml/login.h"
+#include "login.h"
 
 #include <QAuthenticator>
 #include <QApplication>
