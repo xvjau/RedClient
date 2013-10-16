@@ -22,6 +22,7 @@
 
 #include <QJsonValueRef>
 #include <QJsonObject>
+#include <QDebug>
 
 #include <cassert>
 
@@ -46,6 +47,8 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     assert(json.isObject());
     
     QJsonObject obj = json.toObject();
+    
+    qDebug() << obj;
     
     m_id = obj.value("id").toDouble();
     m_createdOn = QDateTime::fromString(obj.value("created_on").toString());

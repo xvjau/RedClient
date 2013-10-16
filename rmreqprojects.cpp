@@ -24,6 +24,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include <cassert>
+
 RMReqProjects::RMReqProjects(RedMineManager* manager): 
     RMRequest(manager)
 {
@@ -44,16 +46,18 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
     m_projects.clear();
     
     QJsonObject obj = m_jsonDocument.object();
-    QJsonValue list = obj.value("projects");
     
-    if (list.isArray())
+    auto it = obj.find("projects");
+    
+    assert(it != obj.end());
+    
+    auto list = it.value().toArray();
+    
+    for(auto project : list)
     {
-        for(auto project : list.toArray())
-        {
-            RMProject p(project, m_manager);
-            int id = p.id();
-            
-            m_projects.insert(std::make_pair(id, std::move(p)));
-        }
+        RMProject p(project, m_manager);
+        int id = p.id();
+        
+        m_projects.insert(std::make_pair(id, std::move(p)));
     }
 }

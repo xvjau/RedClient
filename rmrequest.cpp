@@ -93,12 +93,12 @@ void RMRequest::requestSslErrors(QList< QSslError > errorList)
 
 void RMRequest::requestReadyRead()
 {
-    qDebug() << m_reply->readAll();
 }
 
 void RMRequest::replyFinished(QNetworkReply* reply)
 {
-    m_jsonDocument = QJsonDocument::fromBinaryData(reply->readAll());
+    QByteArray data = reply->readAll();
+    m_jsonDocument = QJsonDocument::fromJson(data);
     reply->deleteLater();
 }
 
@@ -109,6 +109,15 @@ void RMRequest::start()
     QNetworkRequest request;
     request.setUrl(buildUrl());
     request.setRawHeader("User-Agent", QApplication::applicationName().toUtf8());
+    
+    auto &extraHeaders = m_manager->extraHeaders();
+    if (!extraHeaders.isEmpty())
+    {
+        for(auto it = extraHeaders.constBegin(), end = extraHeaders.constEnd(); it != end; it++)
+        {
+            request.setRawHeader(it.key().toUtf8(), it.value().toUtf8());
+        }
+    }
     
     m_reply = m_manager->accessManager()->get(request);
     connect(m_reply, SIGNAL(readyRead()), this, SLOT(requestReadyRead()));
