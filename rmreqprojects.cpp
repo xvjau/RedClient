@@ -43,7 +43,7 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
 {
     RMRequest::replyFinished(reply);
     
-    m_projects.clear();
+    ProjectMapPtr projects(new std::unordered_map<int, RMProject>());
     
     QJsonObject obj = m_jsonDocument.object();
     
@@ -58,7 +58,10 @@ void RMReqProjects::replyFinished(QNetworkReply* reply)
             RMProject p(project, m_manager);
             int id = p.id();
             
-            m_projects.insert(std::make_pair(id, std::move(p)));
+            projects->insert(std::make_pair(id, std::move(p)));
         }
     }
+    
+    emit recievedProjectList(projects);
+    deleteLater();
 }

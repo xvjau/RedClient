@@ -1,6 +1,6 @@
 /*
  * <one line to give the library's name and an idea of what it does.>
- * Copyright (C) 2013  Gianni Rossi <gianni.rossi@gmail.com>
+ * Copyright (C) 2013  Gianni Rossi <gianni.rossi@bitforge.com.br>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,24 +18,24 @@
  *
  */
 
-#ifndef RMREQPROJECTS_H
-#define RMREQPROJECTS_H
+#ifndef PROJECTSMODEL_H
+#define PROJECTSMODEL_H
 
-#include "rmrequest.h"
+#include "abstracttreemodel.h"
 #include "rmproject.h"
 
-class RMReqProjects : public RMRequest
+class ProjectsModel : public AbstractTreeModel
 {
     Q_OBJECT
+    
 public:
-    explicit RMReqProjects(RedMineManager *manager);
+    explicit ProjectsModel(QObject* parent = 0);
     
-protected:
-    virtual QUrl buildUrl();
-    virtual void replyFinished(QNetworkReply* reply);
+public slots:
+    void setProjectData(ProjectMapPtr projectMap);
     
-signals:
-    void recievedProjectList(ProjectMapPtr projects);
+public:
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 };
 
-#endif // RMREQPROJECTS_H
+#endif // PROJECTSMODEL_H

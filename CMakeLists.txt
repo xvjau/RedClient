@@ -8,6 +8,8 @@ add_definitions(${Qt5Widgets_DEFINITIONS} -std=c++11 -fPIC -fPIE -Wall -Wextra)
 
 include_directories(${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Qml_INCLUDE_DIRS} ${Qt5Quick_INCLUDE_DIRS} ${Qt5Sql_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
+add_subdirectory(widgets)
+
 FILE(GLOB QML_FILES "qml/*.qml")
 
 add_custom_command(
@@ -35,12 +37,12 @@ add_custom_command(
     COMMENT "QML Resources"
 )
 
-set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp login.cpp)
+set(RedClient_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp abstracttreemodel.cpp projectsmodel.cpp rmrequest.cpp rmreqprojects.cpp redminemanager.cpp main.cpp rmproject.cpp login.cpp)
 
 qt5_wrap_ui(UI_SRCS login.ui)
 
 add_executable(RedClient ${RedClient_SRCS} ${UI_SRCS})
 
-target_link_libraries(RedClient ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES})
+target_link_libraries(RedClient RedClientWidgets ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES})
 
 install(TARGETS RedClient RUNTIME DESTINATION bin)

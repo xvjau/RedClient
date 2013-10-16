@@ -1,6 +1,6 @@
 /*
  * <one line to give the library's name and an idea of what it does.>
- * Copyright (C) 2013  Gianni Rossi <gianni.rossi@gmail.com>
+ * Copyright (C) 2013  Gianni Rossi <gianni.rossi@bitforge.com.br>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,24 +18,35 @@
  *
  */
 
-#ifndef RMREQPROJECTS_H
-#define RMREQPROJECTS_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "rmrequest.h"
-#include "rmproject.h"
+#include <QMainWindow>
 
-class RMReqProjects : public RMRequest
+#include "../redminemanager.h"
+#include "../projectsmodel.h"
+
+namespace Ui
+{
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 public:
-    explicit RMReqProjects(RedMineManager *manager);
+    MainWindow(RedMineManager *_manager, QWidget* parent = 0, Qt::WindowFlags flags = 0);
     
-protected:
-    virtual QUrl buildUrl();
-    virtual void replyFinished(QNetworkReply* reply);
+private:
+    Ui::MainWindow* ui = nullptr;
     
-signals:
-    void recievedProjectList(ProjectMapPtr projects);
+    RedMineManager  *m_manager;
+    
+    ProjectsModel m_projectsModel;
+
+private slots:
+    void setProjectData(ProjectMapPtr);
 };
 
-#endif // RMREQPROJECTS_H
+#endif // MAINWINDOW_H

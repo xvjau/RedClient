@@ -48,7 +48,7 @@ protected slots:
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     
 signals:
-    void responseListProjects(QList<RMProject> *projects);
+    void recievedProjectList(ProjectMapPtr projects);
     
 public:
     const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }

@@ -23,9 +23,14 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <unordered_map>
+#include <QSharedPointer>
 
 class RedMineManager;
 class QJsonValueRef;
+class RMProject;
+
+typedef QSharedPointer<std::unordered_map<int, RMProject>> ProjectMapPtr;
 
 class RMProject : public QObject
 {
@@ -46,7 +51,7 @@ protected:
     QString     m_name;
     QString     m_description;
     
-    int         m_parent = -1;
+    int         m_parentProjectId = 0;
     
 public:
     int         id() const { return m_id; }
@@ -55,6 +60,7 @@ public:
     QString     identifier() const { return m_identifier; }
     QString     name() const { return m_name; }
     QString     description() const { return m_description; }
+    int         parentProjectId() const { return m_parentProjectId; }
 };
 
 #endif // RMPROJECTS_H

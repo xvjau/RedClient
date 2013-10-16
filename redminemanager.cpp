@@ -65,6 +65,9 @@ void RedMineManager::authenticationRequired(QNetworkReply* reply, QAuthenticator
 void RedMineManager::listProjects()
 {  
     RMReqProjects *req = new RMReqProjects(this);
+    
+    connect(req, SIGNAL(recievedProjectList(ProjectMapPtr)), this, SIGNAL(recievedProjectList(ProjectMapPtr)));
+    
     req->start();
 }
 

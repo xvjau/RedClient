@@ -2,6 +2,8 @@
 
 #include "redminemanager.h"
 
+#include "widgets/mainwindow.h"
+
 #include <QQuickWindow>
 #include <QQmlEngine>
 #include <QQmlComponent>
@@ -53,7 +55,10 @@ int main(int argc, char** argv)
         
         engine.rootContext()->setContextProperty("redmineManager", &redmineManager);
         
-        createAndShow(engine, QUrl("qrc:/qml/MainWindow.qml"));
+        //createAndShow(engine, QUrl("qrc:/qml/MainWindow.qml"));
+        
+        MainWindow mw(&redmineManager);
+        mw.show();
         
         return app.exec();
     }

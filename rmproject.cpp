@@ -31,13 +31,20 @@ static void __registerClass() __attribute__((constructor));
 static void __registerClass() 
 {
     qRegisterMetaType<RMProject*>("RMProject");
+    qRegisterMetaType<ProjectMapPtr*>("ProjectMapPtr");
 }
 
 RMProject::RMProject(RMProject&& other): 
     QObject(other.parent()),
-    m_manager(other.m_manager)
+    m_manager(other.m_manager),
+    m_id(other.m_id),
+    m_createdOn(std::move(other.m_createdOn)),
+    m_updatedOn(std::move(other.m_updatedOn)),
+    m_identifier(std::move(other.m_identifier)),
+    m_name(std::move(other.m_name)),
+    m_description(std::move(other.m_description)),
+    m_parentProjectId(other.m_parentProjectId)
 {
-
 }
 
 RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject* parent): 
@@ -47,8 +54,6 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     assert(json.isObject());
     
     QJsonObject obj = json.toObject();
-    
-    qDebug() << "Project " << obj;
     
     m_id = obj.value("id").toDouble();
     m_createdOn = QDateTime::fromString(obj.value("created_on").toString());
@@ -60,7 +65,7 @@ RMProject::RMProject(const QJsonValueRef& json, RedMineManager* manager, QObject
     auto parentProj = obj.value("parent");
     if (parentProj.isObject())
     {
-        m_parent = parentProj.toObject().value("id").toDouble();
+        m_parentProjectId = parentProj.toObject().value("id").toDouble();
     }
 }
 
