@@ -2,6 +2,20 @@ project(RedClient)
 cmake_minimum_required(VERSION 2.8)
 find_package(Qt5 COMPONENTS Gui Widgets Qml Quick Sql)
 
+set(ENABLE_LTO FALSE CACHE BOOL "Enable Link-Time optimization")
+if (${ENABLE_LTO})
+    set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -flto)
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -flto)
+    set(CMAKE_LINK_LIBRARY_FLAG ${CMAKE_LINK_LIBRARY_FLAG} -flto)
+    set(CMAKE_LINK_EXE_FLAG ${CMAKE_LINK_EXE_FLAG} -flto)
+endif()
+
+set(ENABLE_ADDRESS_SANITIZER FALSE CACHE BOOL "Enable Address-sanitizer")
+if (${ENABLE_ADDRESS_SANITIZER})
+    add_definitions(-fsanitize=address)
+    set(EXTRA_LIBS ${EXTRA_LIBS} asan)
+endif()
+
 set(CMAKE_AUTOMOC ON)
 
 add_definitions(${Qt5Widgets_DEFINITIONS} -std=c++11 -fPIC -fPIE -Wall -Wextra)
@@ -43,6 +57,6 @@ qt5_wrap_ui(UI_SRCS login.ui)
 
 add_executable(RedClient ${RedClient_SRCS} ${UI_SRCS})
 
-target_link_libraries(RedClient RedClientWidgets ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES})
+target_link_libraries(RedClient RedClientWidgets ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Quick_LIBRARIES} ${Qt5Sql_LIBRARIES} ${EXTRA_LIBS})
 
 install(TARGETS RedClient RUNTIME DESTINATION bin)
