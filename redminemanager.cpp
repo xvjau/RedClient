@@ -21,6 +21,7 @@
 #include "redminemanager.h"
 
 #include "rmreqprojects.h"
+#include "rmreqissues.h"
 
 #include "login.h"
 
@@ -71,5 +72,14 @@ void RedMineManager::listProjects()
     req->start();
 }
 
+void RedMineManager::listIssues()
+{
+    RMReqIssues::Filters filters;
+    RMReqIssues *req = new RMReqIssues(this, std::move(filters));
+    
+    connect(req, SIGNAL(recievedIssueList(IssueVectorPtr)), this, SIGNAL(recievedIssuesList(IssueVectorPtr)));
+    
+    req->start();
+}
 
 #include "redminemanager.moc"

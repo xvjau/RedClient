@@ -21,6 +21,8 @@
 #include "rmrequest.h"
 #include "redminemanager.h"
 
+#include <cassert>
+
 #include <QApplication>
 #include <QDebug>
 #include <QJsonDocument>
@@ -97,6 +99,8 @@ void RMRequest::requestReadyRead()
 
 void RMRequest::replyFinished(QNetworkReply* reply)
 {
+    assert(checkIfReplyIsForMe(reply));
+    
     QByteArray data = reply->readAll();
     m_jsonDocument = QJsonDocument::fromJson(data);
     reply->deleteLater();
@@ -107,6 +111,8 @@ void RMRequest::start()
     connect(m_manager->accessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
     
     QNetworkRequest request;
+    
+    request.setOriginatingObject(this);
     request.setUrl(buildUrl());
     request.setHeader(QNetworkRequest::UserAgentHeader,   QApplication::applicationName().toUtf8());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

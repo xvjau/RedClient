@@ -27,6 +27,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QDebug>
+
 RMReqIssues::RMReqIssues(RedMineManager* manager, Filters filters): 
     RMRequest(manager),
     m_filters(filters)
@@ -59,31 +61,38 @@ QUrl RMReqIssues::buildUrl()
         query.addQueryItem("assigned_to_id", m_filters.assignedTo.toString());
     
     result.setQuery(query);
-        
+    
+    qDebug() << result.toString();
+    
     return result;
 }
 
 void RMReqIssues::replyFinished(QNetworkReply* reply)
 {
-    RMRequest::replyFinished(reply);
-    
-    auto issues = std::make_shared<std::vector<RMIssue>>();
-    
-    QJsonObject obj = m_jsonDocument.object();
-    
-    auto it = obj.find("projects");
-    
-    if(it != obj.end())
-    {
-        auto list = it.value().toArray();
+    if (checkIfReplyIsForMe(reply))
+    {    
+        RMRequest::replyFinished(reply);
         
-        for(auto issue : list)
+        auto issues = std::make_shared<std::vector<RMIssue>>();
+        
+        QJsonObject obj = m_jsonDocument.object();
+        
+        qDebug() << obj;
+        
+        auto it = obj.find("issues");
+        
+        if(it != obj.end())
         {
-            RMIssue p(issue, m_manager);            
-            issues->push_back(std::move(p));
+            auto list = it.value().toArray();
+            
+            for(auto issue : list)
+            {
+                RMIssue p(issue, m_manager);            
+                issues->push_back(std::move(p));
+            }
         }
+        
+        emit recievedIssueList(issues);
+        deleteLater();
     }
-    
-    emit recievedIssueList(issues);
-    deleteLater();
 }

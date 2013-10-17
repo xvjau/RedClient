@@ -50,6 +50,10 @@ protected slots:
     virtual void requestError(QNetworkReply::NetworkError error);
     virtual void requestSslErrors(QList<QSslError> errorList);
     
+    bool checkIfReplyIsForMe(QNetworkReply *reply)
+    {
+        return reply->request().originatingObject() == this;
+    }
 public:
     virtual void start();
     

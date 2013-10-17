@@ -48,14 +48,20 @@
     <rect>
      <x>0</x>
      <y>240</y>
-     <width>331</width>
-     <height>201</height>
+     <width>270</width>
+     <height>228</height>
     </rect>
    </property>
    <property name="windowTitle">
-    <string>My Issues</string>
+    <string>Open Issues</string>
    </property>
-   <widget class="QWidget" name="dockWidgetContents_2"/>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QTableView" name="tvIssues"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources/>

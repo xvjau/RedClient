@@ -45,7 +45,7 @@ public:
     explicit RMProject(RedMineManager *manager, QObject *parent = nullptr);
     
 protected:
-    RedMineManager *m_manager;
+    RedMineManager *m_manager = nullptr;
     
     int         m_id;
     QDateTime   m_createdOn;

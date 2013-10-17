@@ -27,6 +27,7 @@
 #include <QNetworkAccessManager>
 
 #include "rmproject.h"
+#include "rmissue.h"
 
 class QNetworkAccessManager;
 
@@ -49,6 +50,7 @@ protected slots:
     
 signals:
     void recievedProjectList(ProjectVectorPtr projects);
+    void recievedIssuesList(IssueVectorPtr issues);
     
 public:
     const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }
@@ -57,6 +59,7 @@ public:
     
 public slots:
     Q_INVOKABLE void listProjects();
+    Q_INVOKABLE void listIssues();
 };
 
 #endif // REDMINEMANAGER_H

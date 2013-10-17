@@ -43,25 +43,28 @@ QUrl RMReqProjects::buildUrl()
 
 void RMReqProjects::replyFinished(QNetworkReply* reply)
 {
-    RMRequest::replyFinished(reply);
-    
-    auto projects = std::make_shared<std::vector<RMProject>>();
-    
-    QJsonObject obj = m_jsonDocument.object();
-    
-    auto it = obj.find("projects");
-    
-    if(it != obj.end())
+    if (checkIfReplyIsForMe(reply))
     {
-        auto list = it.value().toArray();
+        RMRequest::replyFinished(reply);
         
-        for(auto project : list)
+        auto projects = std::make_shared<std::vector<RMProject>>();
+        
+        QJsonObject obj = m_jsonDocument.object();
+        
+        auto it = obj.find("projects");
+        
+        if(it != obj.end())
         {
-            RMProject p(project, m_manager);
-            projects->push_back(std::move(p));
+            auto list = it.value().toArray();
+            
+            for(auto project : list)
+            {
+                RMProject p(project, m_manager);
+                projects->push_back(std::move(p));
+            }
         }
+        
+        emit recievedProjectList(projects);
+        deleteLater();
     }
-    
-    emit recievedProjectList(projects);
-    deleteLater();
 }

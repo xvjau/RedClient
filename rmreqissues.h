@@ -24,11 +24,6 @@
 #include "rmrequest.h"
 #include "rmissue.h"
 
-#include <vector>
-#include <memory>
-
-typedef std::shared_ptr<std::vector<RMIssue>> IssueVectorPtr;
-
 class RMReqIssues : public RMRequest
 {
     Q_OBJECT

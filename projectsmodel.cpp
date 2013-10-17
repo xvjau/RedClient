@@ -34,11 +34,7 @@ public:
         m_project(std::move(_project))
     {
     }
-    
-    AbstractModelItem *m_parent;
-    AbstractModelItemVector m_children; 
-    int m_row;
-    
+        
     virtual int columnCount() const { return 7; }
     
     virtual QVariant data(int _col, int _role = Qt::DisplayRole) const 

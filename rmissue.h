@@ -23,8 +23,60 @@
 
 #include <QObject>
 #include <QJsonValueRef>
+#include <QJsonObject>
+#include <QDateTime>
+
+#include <vector>
+#include <memory>
 
 class RedMineManager;
+class RMIssue;
+
+typedef std::shared_ptr<std::vector<RMIssue>> IssueVectorPtr;
+
+class RMObjectSummary
+{
+public:
+    RMObjectSummary() {}
+    RMObjectSummary(const RMObjectSummary &other):
+        m_id(other.m_id),
+        m_name(other.m_name)
+    {
+    }
+    RMObjectSummary(RMObjectSummary &&other):
+        m_id(other.m_id),
+        m_name(std::move(other.m_name))
+    {
+    }
+    
+    RMObjectSummary& operator=(const RMObjectSummary& other)
+    {
+        m_id = other.m_id;
+        m_name = other.m_name;
+        return *this;
+    }
+    
+    RMObjectSummary& operator=(RMObjectSummary&& other)
+    {
+        m_id = other.m_id;
+        m_name = std::move(other.m_name);
+        return *this;
+    }
+    
+    RMObjectSummary(const QJsonObject &_obj):
+        m_id(_obj.value("id").toString().toInt()),
+        m_name(_obj.value("name").toString())
+    {
+    }
+    
+protected:
+    int     m_id = 0;
+    QString m_name;
+    
+public:
+    int id() const { return m_id; }
+    const QString& name() const { return m_name; }
+};
 
 class RMIssue: public QObject
 {
@@ -41,6 +93,38 @@ public:
     RMIssue(RMIssue &&other);
     RMIssue(const QJsonValueRef &json, RedMineManager *manager, QObject *parent = nullptr);
     explicit RMIssue(RedMineManager *manager, QObject *parent = nullptr);
+
+protected:
+    RedMineManager *m_manager = nullptr;
+    
+    int m_id = 0;
+    QString m_subject;
+    RMObjectSummary m_status;
+    QDateTime m_createdOn;
+    RMObjectSummary m_author;
+    RMObjectSummary m_project;
+    RMObjectSummary m_tracker;
+    RMObjectSummary m_assignedTo;
+    QDateTime m_updatedOn;
+    QDateTime m_startDate;
+    double m_doneRatio = 0;
+    QString m_description;
+    RMObjectSummary m_priority;
+
+public:
+    int id() const { return m_id; }
+    const QString& subject() const { return m_subject; }
+    const RMObjectSummary& status() const { return m_status; }
+    const QDateTime& createdOn() const { return m_createdOn; }
+    const RMObjectSummary& author() const { return m_author; }
+    const RMObjectSummary& project() const { return m_project; }
+    const RMObjectSummary& tracker() const { return m_tracker; }
+    const RMObjectSummary& assignedTo() const { return m_assignedTo; }
+    const QDateTime&  updatedOn() const { return m_updatedOn; }
+    const QDateTime&  startDate() const { return m_startDate; }
+    double doneRatio() const { return m_doneRatio; }
+    const QString& description() const { return m_description; }
+    const RMObjectSummary& priority() const { return m_priority; }
 };
 
 #endif // RMISSUE_H

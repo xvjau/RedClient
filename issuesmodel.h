@@ -18,39 +18,24 @@
  *
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef ISSUESMODEL_H
+#define ISSUESMODEL_H
 
-#include <QMainWindow>
+#include "abstracttreemodel.h"
+#include "rmissue.h"
 
-#include "../redminemanager.h"
-#include "../projectsmodel.h"
-#include "../issuesmodel.h"
-
-namespace Ui
-{
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class IssuesModel : public AbstractTreeModel
 {
     Q_OBJECT
-
+    
 public:
-    MainWindow(RedMineManager *_manager, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit IssuesModel(QObject* parent = 0);
     
-private:
-    Ui::MainWindow* ui = nullptr;
+public slots:
+    void setIssuesData(IssueVectorPtr issues);
     
-    RedMineManager  *m_manager;
-    
-    ProjectsModel   m_projectsModel;
-    IssuesModel     m_issuesModel;
-
-private slots:
-    void setProjectData(ProjectVectorPtr);
-    void setIssuesData(IssueVectorPtr);
-    
+public:
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 };
 
-#endif // MAINWINDOW_H
+#endif // ISSUESMODEL_H
