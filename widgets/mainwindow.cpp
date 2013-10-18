@@ -28,15 +28,19 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
 {
     ui = new Ui::MainWindow();
     ui->setupUi(this);
-       
+    
     connect(m_manager, SIGNAL(recievedProjectList(ProjectVectorPtr)), &m_projectsModel, SLOT(setProjectData(ProjectVectorPtr)));
     connect(m_manager, SIGNAL(recievedProjectList(ProjectVectorPtr)), this, SLOT(setProjectData(ProjectVectorPtr)));
     
     connect(m_manager, SIGNAL(recievedIssuesList(IssueVectorPtr)), &m_issuesModel, SLOT(setIssuesData(IssueVectorPtr)));
     connect(m_manager, SIGNAL(recievedIssuesList(IssueVectorPtr)), this, SLOT(setIssuesData(IssueVectorPtr)));
     
+    connect(m_manager, SIGNAL(recievedTimeEntriesList(TimeEntryVectorPtr)), &m_timeEntriesModel, SLOT(setTimeEntriesData(TimeEntryVectorPtr)));
+    connect(m_manager, SIGNAL(recievedTimeEntriesList(TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(TimeEntryVectorPtr)));
+    
     m_manager->listProjects();
     m_manager->listIssues();
+    m_manager->listTimeEntries();
 }
 
 void MainWindow::setProjectData(ProjectVectorPtr)
@@ -57,4 +61,10 @@ void MainWindow::setIssuesData(IssueVectorPtr)
 {
     ui->tvIssues->setModel(&m_issuesModel);
 }
+
+void MainWindow::setTimeEntriesData(TimeEntryVectorPtr)
+{
+    ui->tvTimeEntries->setModel(&m_timeEntriesModel);
+}
+
 

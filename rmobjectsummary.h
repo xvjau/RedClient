@@ -32,11 +32,13 @@ class RMObjectSummary: public QObject
 public:
     RMObjectSummary() {}
     RMObjectSummary(const RMObjectSummary &other):
+        QObject(other.parent()),
         m_id(other.m_id),
         m_name(other.m_name)
     {
     }
     RMObjectSummary(RMObjectSummary &&other):
+        QObject(other.parent()),
         m_id(other.m_id),
         m_name(std::move(other.m_name))
     {
@@ -44,6 +46,7 @@ public:
     
     RMObjectSummary& operator=(const RMObjectSummary& other)
     {
+        setParent(other.parent());
         m_id = other.m_id;
         m_name = other.m_name;
         return *this;
@@ -51,12 +54,14 @@ public:
     
     RMObjectSummary& operator=(RMObjectSummary&& other)
     {
+        setParent(other.parent());
         m_id = other.m_id;
         m_name = std::move(other.m_name);
         return *this;
     }
     
-    RMObjectSummary(const QJsonObject &_obj):
+    RMObjectSummary(const QJsonObject &_obj, QObject *_parent = nullptr):
+        QObject(_parent),
         m_id(_obj.value("id").toString().toInt()),
         m_name(_obj.value("name").toString())
     {

@@ -18,41 +18,34 @@
  *
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TIMEENTRIESMODEL_H
+#define TIMEENTRIESMODEL_H
 
-#include <QMainWindow>
+#include <QAbstractTableModel>
+#include "rmtimeentry.h"
 
-#include "../redminemanager.h"
-#include "../projectsmodel.h"
-#include "../issuesmodel.h"
-#include "../timeentriesmodel.h"
-
-namespace Ui
-{
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class TimeEntriesModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    MainWindow(RedMineManager *_manager, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    virtual int columnCount(const QModelIndex& parent) const override;
+    virtual int rowCount(const QModelIndex& parent) const override;
+    
+    virtual QVariant data(const QModelIndex& index, int role) const override;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    
+    virtual bool insertRows(int row, int count, const QModelIndex& parent) override;
+    virtual bool removeRows(int row, int count, const QModelIndex& parent) override;
     
 private:
-    Ui::MainWindow* ui = nullptr;
+    TimeEntryVectorPtr m_timeEntriesData;
     
-    RedMineManager  *m_manager;
-    
-    ProjectsModel   m_projectsModel;
-    IssuesModel     m_issuesModel;
-    TimeEntriesModel m_timeEntriesModel;
+public slots:
+    void setTimeEntriesData(TimeEntryVectorPtr timeEntries);
 
-private slots:
-    void setProjectData(ProjectVectorPtr);
-    void setIssuesData(IssueVectorPtr);
-    void setTimeEntriesData(TimeEntryVectorPtr);    
 };
 
-#endif // MAINWINDOW_H
+#endif // TIMEENTRIESMODEL_H

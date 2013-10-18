@@ -18,41 +18,26 @@
  *
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RMREQTIMEENTRY_H
+#define RMREQTIMEENTRY_H
 
-#include <QMainWindow>
+#include "rmrequest.h"
+#include "rmtimeentry.h"
 
-#include "../redminemanager.h"
-#include "../projectsmodel.h"
-#include "../issuesmodel.h"
-#include "../timeentriesmodel.h"
-
-namespace Ui
-{
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class RMReqTimeEntry : public RMRequest
 {
     Q_OBJECT
 
 public:
-    MainWindow(RedMineManager *_manager, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit RMReqTimeEntry(RedMineManager* manager);
     
-private:
-    Ui::MainWindow* ui = nullptr;
-    
-    RedMineManager  *m_manager;
-    
-    ProjectsModel   m_projectsModel;
-    IssuesModel     m_issuesModel;
-    TimeEntriesModel m_timeEntriesModel;
+protected:
+    virtual QUrl buildUrl();
+    virtual void replyFinished(QNetworkReply* reply) override;
 
-private slots:
-    void setProjectData(ProjectVectorPtr);
-    void setIssuesData(IssueVectorPtr);
-    void setTimeEntriesData(TimeEntryVectorPtr);    
+signals:
+    void recievedTimeEntryList(TimeEntryVectorPtr);
+
 };
 
-#endif // MAINWINDOW_H
+#endif // RMREQTIMEENTRY_H

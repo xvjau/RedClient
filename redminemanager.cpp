@@ -22,6 +22,7 @@
 
 #include "rmreqprojects.h"
 #include "rmreqissues.h"
+#include "rmreqtimeentry.h"
 
 #include "login.h"
 
@@ -81,5 +82,15 @@ void RedMineManager::listIssues()
     
     req->start();
 }
+
+void RedMineManager::listTimeEntries()
+{
+    RMReqTimeEntry *req = new RMReqTimeEntry(this);
+    
+    connect(req, SIGNAL(recievedTimeEntryList(TimeEntryVectorPtr)), this, SIGNAL(recievedTimeEntriesList(TimeEntryVectorPtr)));
+    
+    req->start();
+}
+
 
 #include "redminemanager.moc"

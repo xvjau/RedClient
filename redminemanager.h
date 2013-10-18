@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QNetworkAccessManager>
 
+#include "rmtimeentry.h"
 #include "rmproject.h"
 #include "rmissue.h"
 
@@ -51,6 +52,7 @@ protected slots:
 signals:
     void recievedProjectList(ProjectVectorPtr projects);
     void recievedIssuesList(IssueVectorPtr issues);
+    void recievedTimeEntriesList(TimeEntryVectorPtr timeEntries);
     
 public:
     const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }
@@ -60,6 +62,7 @@ public:
 public slots:
     Q_INVOKABLE void listProjects();
     Q_INVOKABLE void listIssues();
+    Q_INVOKABLE void listTimeEntries();
 };
 
 #endif // REDMINEMANAGER_H
