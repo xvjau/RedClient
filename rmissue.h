@@ -34,50 +34,6 @@ class RMIssue;
 
 typedef std::shared_ptr<std::vector<RMIssue>> IssueVectorPtr;
 
-class RMObjectSummary
-{
-public:
-    RMObjectSummary() {}
-    RMObjectSummary(const RMObjectSummary &other):
-        m_id(other.m_id),
-        m_name(other.m_name)
-    {
-    }
-    RMObjectSummary(RMObjectSummary &&other):
-        m_id(other.m_id),
-        m_name(std::move(other.m_name))
-    {
-    }
-    
-    RMObjectSummary& operator=(const RMObjectSummary& other)
-    {
-        m_id = other.m_id;
-        m_name = other.m_name;
-        return *this;
-    }
-    
-    RMObjectSummary& operator=(RMObjectSummary&& other)
-    {
-        m_id = other.m_id;
-        m_name = std::move(other.m_name);
-        return *this;
-    }
-    
-    RMObjectSummary(const QJsonObject &_obj):
-        m_id(_obj.value("id").toString().toInt()),
-        m_name(_obj.value("name").toString())
-    {
-    }
-    
-protected:
-    int     m_id = 0;
-    QString m_name;
-    
-public:
-    int id() const { return m_id; }
-    const QString& name() const { return m_name; }
-};
-
 class RMIssue: public QObject
 {
     Q_OBJECT
