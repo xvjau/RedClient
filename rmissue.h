@@ -21,6 +21,8 @@
 #ifndef RMISSUE_H
 #define RMISSUE_H
 
+#include "rmobjectsummary.h"
+
 #include <QObject>
 #include <QJsonValueRef>
 #include <QJsonObject>

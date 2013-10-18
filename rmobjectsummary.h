@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QJsonObject>
 
 class RMObjectSummary: public QObject
 {
