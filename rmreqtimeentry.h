@@ -29,11 +29,25 @@ class RMReqTimeEntry : public RMRequest
     Q_OBJECT
 
 public:
-    explicit RMReqTimeEntry(RedMineManager* manager);
+    explicit RMReqTimeEntry(RedMineManager* manager): 
+        RMRequest(manager)
+    {
+    }
     
 protected:
-    virtual QUrl buildUrl();
-    virtual void replyFinished(QNetworkReply* reply) override;
+    virtual QUrl buildUrl()
+    {
+        QUrl result(m_manager->baseUrl());
+        result.setPath("/time_entries.json");
+        return result;
+    }
+    
+    virtual void replyFinished(QNetworkReply* reply) override
+    {
+        processReply<RMTimeEntry>(reply, "time_entries", 
+                                  [this] (int limit, int offset, const TimeEntryVectorPtr &data)
+                                  { emit recievedTimeEntryList(limit, offset, data); });
+    }
 
 signals:
     void recievedTimeEntryList(int limit, int offset, TimeEntryVectorPtr);

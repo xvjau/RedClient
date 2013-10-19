@@ -21,6 +21,8 @@
 #ifndef RMREQISSUES_H
 #define RMREQISSUES_H
 
+#include <QUrlQuery>
+
 #include "rmrequest.h"
 #include "rmissue.h"
 
@@ -38,13 +40,52 @@ public:
         QVariant assignedTo;
     };
     
-    explicit RMReqIssues(RedMineManager* manager, Filters filters);
+    explicit RMReqIssues(RedMineManager* manager, Filters filters): 
+        RMRequest(manager),
+        m_filters(filters)
+    {
+    }
     
 protected:
     Filters m_filters;
     
-    virtual QUrl buildUrl() override;
-    virtual void replyFinished(QNetworkReply* reply) override;
+    virtual QUrl buildUrl() override
+    {
+        QUrl result(m_manager->baseUrl());
+        result.setPath("/issues.json");
+        
+        QUrlQuery query;
+        
+        if (!m_filters.projectId.isNull())
+        {
+            query.addQueryItem("project_id", m_filters.projectId.toString());
+            
+            if (!m_filters.subProjectId.isNull())
+                query.addQueryItem("subproject_id", m_filters.subProjectId.toString());
+        }
+        
+        if (!m_filters.trackerId.isNull())
+            query.addQueryItem("tracker_id", m_filters.trackerId.toString());
+        
+        if (m_filters.status != RMIssue::isAll)
+            query.addQueryItem("status_id", (m_filters.status == RMIssue::isOpen ? "open" : "closed"));
+        
+        if (!m_filters.assignedTo.isNull())
+            query.addQueryItem("assigned_to_id", m_filters.assignedTo.toString());
+        
+        result.setQuery(query);
+        
+        qDebug() << result.toString();
+        
+        return result;
+    }
+    
+    virtual void replyFinished(QNetworkReply* reply) override
+    {
+        processReply<RMIssue>(reply, "issues", 
+                              [this] (int limit, int offset, const IssueVectorPtr &data)
+                              { emit recievedIssueList(limit, offset, data); });
+    }
 
 signals:
     void recievedIssueList(int limit, int offset, IssueVectorPtr);

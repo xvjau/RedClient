@@ -60,9 +60,9 @@ set(RedClient_SRCS
     rmtimeentry.cpp 
     
     rmrequest.cpp 
-    rmreqprojects.cpp 
-    rmreqissues.cpp
-    rmreqtimeentry.cpp
+    rmreqprojects.h 
+    rmreqissues.h
+    rmreqtimeentry.h
     
     abstracttreemodel.cpp 
     projectsmodel.cpp 

@@ -28,6 +28,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 #include <functional>
 #include <memory>

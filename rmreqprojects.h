@@ -27,12 +27,24 @@
 class RMReqProjects : public RMRequest
 {
     Q_OBJECT
+    
 public:
-    explicit RMReqProjects(RedMineManager *manager);
+    explicit RMReqProjects(RedMineManager* manager): RMRequest(manager) {}
     
 protected:
-    virtual QUrl buildUrl() override;
-    virtual void replyFinished(QNetworkReply* reply) override;
+    virtual QUrl buildUrl() override
+    {
+        QUrl result(m_manager->baseUrl());
+        result.setPath("/projects.json");
+        return result;
+    }
+    
+    virtual void replyFinished(QNetworkReply* reply) override
+    {
+        processReply<RMProject>(reply, "projects", 
+                                [this] (int limit, int offset, const ProjectVectorPtr &data)
+                                { emit recievedProjectList(limit, offset, data); });
+    }
     
 signals:
     void recievedProjectList(int limit, int offset, ProjectVectorPtr projects);
