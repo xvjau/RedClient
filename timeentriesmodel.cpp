@@ -92,7 +92,7 @@ bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex& parent)
     return false;
 }
 
-void TimeEntriesModel::setTimeEntriesData(TimeEntryVectorPtr timeEntries)
+void TimeEntriesModel::setTimeEntriesData(int limit, int offset, TimeEntryVectorPtr timeEntries)
 {
     m_timeEntriesData = timeEntries;
 }

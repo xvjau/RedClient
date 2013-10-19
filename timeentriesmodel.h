@@ -44,7 +44,7 @@ private:
     TimeEntryVectorPtr m_timeEntriesData;
     
 public slots:
-    void setTimeEntriesData(TimeEntryVectorPtr timeEntries);
+    void setTimeEntriesData(int limit, int offset, TimeEntryVectorPtr timeEntries);
 
 };
 
