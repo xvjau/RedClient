@@ -36,7 +36,7 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override;
 
 signals:
-    void recievedTimeEntryList(TimeEntryVectorPtr);
+    void recievedTimeEntryList(int limit, int offset, TimeEntryVectorPtr);
 
 };
 

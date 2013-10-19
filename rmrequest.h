@@ -25,7 +25,16 @@
 #include <QNetworkReply>
 #include <QList>
 #include <QSslError>
+
 #include <QJsonDocument>
+#include <QJsonObject>
+
+#include <functional>
+#include <memory>
+
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 class RedMineManager;
 class QJsonDocument;
@@ -43,6 +52,42 @@ protected:
     QJsonDocument   m_jsonDocument;
     
     virtual QUrl buildUrl() = 0;
+    
+    template<typename T>
+    void processReply(QNetworkReply *reply, const QString &objectName, std::function<void (int, int, const std::shared_ptr<std::vector<T>> &)> signalEmiter)
+    {
+        if (checkIfReplyIsForMe(reply))
+        {    
+            RMRequest::replyFinished(reply);
+            
+            auto data = std::make_shared<std::vector<T>>();
+            
+            QJsonObject obj = m_jsonDocument.object();
+            
+#ifndef NDEBUG
+            qDebug() << obj;
+#endif
+            
+            int limit = obj.value("limit").toDouble();
+            int offset = obj.value("offset").toDouble();
+            
+            auto it = obj.find(objectName);
+            
+            if(it != obj.end())
+            {
+                auto list = it.value().toArray();
+                
+                for(auto issue : list)
+                {
+                    T p(issue, m_manager);
+                    data->push_back(std::move(p));
+                }
+            }
+            
+            signalEmiter(limit, offset, data);
+            deleteLater();
+        }
+    }
     
 protected slots:
     virtual void replyFinished(QNetworkReply* reply);

@@ -38,32 +38,9 @@ QUrl RMReqTimeEntry::buildUrl()
 
 void RMReqTimeEntry::replyFinished(QNetworkReply* reply)
 {
-    if (checkIfReplyIsForMe(reply))
-    {    
-        RMRequest::replyFinished(reply);
-        
-        auto timeEntries = std::make_shared<std::vector<RMTimeEntry>>();
-        
-        QJsonObject obj = m_jsonDocument.object();
-        
-        qDebug() << obj;
-        
-        auto it = obj.find("time_entries");
-        
-        if(it != obj.end())
-        {
-            auto list = it.value().toArray();
-            
-            for(auto issue : list)
-            {
-                RMTimeEntry p(issue, m_manager);            
-                timeEntries->push_back(std::move(p));
-            }
-        }
-        
-        emit recievedTimeEntryList(timeEntries);
-        deleteLater();
-    }
+    processReply<RMTimeEntry>(reply, "time_entries", 
+                              [this] (int limit, int offset, const TimeEntryVectorPtr &data)
+                              { emit recievedTimeEntryList(limit, offset, data); });
 }
 
 #include "rmreqtimeentry.moc"

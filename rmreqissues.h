@@ -47,7 +47,7 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override;
 
 signals:
-    void recievedIssueList(IssueVectorPtr);
+    void recievedIssueList(int limit, int offset, IssueVectorPtr);
 };
 
 #endif // RMREQISSUES_H

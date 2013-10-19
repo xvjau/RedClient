@@ -35,7 +35,7 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override;
     
 signals:
-    void recievedProjectList(ProjectVectorPtr projects);
+    void recievedProjectList(int limit, int offset, ProjectVectorPtr projects);
 };
 
 #endif // RMREQPROJECTS_H

@@ -50,9 +50,9 @@ protected slots:
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     
 signals:
-    void recievedProjectList(ProjectVectorPtr projects);
-    void recievedIssuesList(IssueVectorPtr issues);
-    void recievedTimeEntriesList(TimeEntryVectorPtr timeEntries);
+    void recievedProjectList(int limit, int offset, ProjectVectorPtr projects);
+    void recievedIssuesList(int limit, int offset, IssueVectorPtr issues);
+    void recievedTimeEntriesList(int limit, int offset, TimeEntryVectorPtr timeEntries);
     
 public:
     const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }

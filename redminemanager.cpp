@@ -56,6 +56,8 @@ RedMineManager::~RedMineManager()
 
 void RedMineManager::authenticationRequired(QNetworkReply* reply, QAuthenticator* authenticator)
 {
+    Q_UNUSED(reply);
+    
     Login dlg;
     if (dlg.exec() == QDialog::Rejected)
         QApplication::quit();
@@ -68,7 +70,7 @@ void RedMineManager::listProjects()
 {  
     RMReqProjects *req = new RMReqProjects(this);
     
-    connect(req, SIGNAL(recievedProjectList(ProjectVectorPtr)), this, SIGNAL(recievedProjectList(ProjectVectorPtr)));
+    connect(req, SIGNAL(recievedProjectList(int, int, ProjectVectorPtr)), this, SIGNAL(recievedProjectList(int, int, ProjectVectorPtr)));
     
     req->start();
 }
@@ -78,7 +80,7 @@ void RedMineManager::listIssues()
     RMReqIssues::Filters filters;
     RMReqIssues *req = new RMReqIssues(this, std::move(filters));
     
-    connect(req, SIGNAL(recievedIssueList(IssueVectorPtr)), this, SIGNAL(recievedIssuesList(IssueVectorPtr)));
+    connect(req, SIGNAL(recievedIssueList(int, int, IssueVectorPtr)), this, SIGNAL(recievedIssuesList(int, int, IssueVectorPtr)));
     
     req->start();
 }
@@ -87,7 +89,7 @@ void RedMineManager::listTimeEntries()
 {
     RMReqTimeEntry *req = new RMReqTimeEntry(this);
     
-    connect(req, SIGNAL(recievedTimeEntryList(TimeEntryVectorPtr)), this, SIGNAL(recievedTimeEntriesList(TimeEntryVectorPtr)));
+    connect(req, SIGNAL(recievedTimeEntryList(int, int, TimeEntryVectorPtr)), this, SIGNAL(recievedTimeEntriesList(int, int, TimeEntryVectorPtr)));
     
     req->start();
 }

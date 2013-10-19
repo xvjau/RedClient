@@ -69,30 +69,7 @@ QUrl RMReqIssues::buildUrl()
 
 void RMReqIssues::replyFinished(QNetworkReply* reply)
 {
-    if (checkIfReplyIsForMe(reply))
-    {    
-        RMRequest::replyFinished(reply);
-        
-        auto issues = std::make_shared<std::vector<RMIssue>>();
-        
-        QJsonObject obj = m_jsonDocument.object();
-        
-        qDebug() << obj;
-        
-        auto it = obj.find("issues");
-        
-        if(it != obj.end())
-        {
-            auto list = it.value().toArray();
-            
-            for(auto issue : list)
-            {
-                RMIssue p(issue, m_manager);            
-                issues->push_back(std::move(p));
-            }
-        }
-        
-        emit recievedIssueList(issues);
-        deleteLater();
-    }
+    processReply<RMIssue>(reply, "issues", 
+                              [this] (int limit, int offset, const IssueVectorPtr &data)
+                              { emit recievedIssueList(limit, offset, data); });
 }
