@@ -103,7 +103,11 @@ bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex& parent)
 
 void TimeEntriesModel::setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries)
 {
-    beginInsertRows(QModelIndex(), offset, offset + limit);
+    int last = offset + limit - 1;
+    if (last > totalCount)
+        last = totalCount - 1;
+    
+    beginInsertRows(QModelIndex(), offset, last);
     
     if (!m_timeEntriesData)
         m_timeEntriesData = timeEntries;
