@@ -32,7 +32,7 @@ public:
     explicit IssuesModel(QObject* parent = 0);
     
 public slots:
-    void setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr issues);
+    void setIssuesData(uint limit, uint offset, uint totalCount, IssueVectorPtr issues);
     
 public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

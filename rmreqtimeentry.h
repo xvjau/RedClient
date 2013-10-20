@@ -63,12 +63,12 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override
     {
         processReply<RMTimeEntry>(reply, "time_entries", 
-                                  [this] (int limit, int offset, int totalCount, const TimeEntryVectorPtr &data)
+                                  [this] (uint limit, uint offset, uint totalCount, const TimeEntryVectorPtr &data)
                                   { emit recievedTimeEntryList(limit, offset, totalCount, data); });
     }
 
 signals:
-    void recievedTimeEntryList(int limit, int offset, int totalCount, TimeEntryVectorPtr);
+    void recievedTimeEntryList(uint limit, uint offset, uint totalCount, TimeEntryVectorPtr);
 
 };
 

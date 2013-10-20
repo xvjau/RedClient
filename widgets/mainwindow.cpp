@@ -30,20 +30,20 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     ui = new Ui::MainWindow();
     ui->setupUi(this);
     
-    connect(m_manager, SIGNAL(recievedProjectList(int, int, int, ProjectVectorPtr)), &m_projectsModel, SLOT(setProjectData(int, int, int, ProjectVectorPtr)));
-    connect(m_manager, SIGNAL(recievedProjectList(int, int, int, ProjectVectorPtr)), this, SLOT(setProjectData(int, int, int, ProjectVectorPtr)));
+    connect(m_manager, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)), &m_projectsModel, SLOT(setProjectData(uint, uint, uint, ProjectVectorPtr)));
+    connect(m_manager, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)), this, SLOT(setProjectData(uint, uint, uint, ProjectVectorPtr)));
     
-    connect(m_manager, SIGNAL(recievedIssuesList(int, int, int, IssueVectorPtr)), &m_issuesModel, SLOT(setIssuesData(int, int, int, IssueVectorPtr)));
-    connect(m_manager, SIGNAL(recievedIssuesList(int, int, int, IssueVectorPtr)), this, SLOT(setIssuesData(int, int, int, IssueVectorPtr)));
+    connect(m_manager, SIGNAL(recievedIssuesList(uint, uint, uint, IssueVectorPtr)), &m_issuesModel, SLOT(setIssuesData(uint, uint, uint, IssueVectorPtr)));
+    connect(m_manager, SIGNAL(recievedIssuesList(uint, uint, uint, IssueVectorPtr)), this, SLOT(setIssuesData(uint, uint, uint, IssueVectorPtr)));
     
-    connect(m_manager, SIGNAL(recievedTimeEntriesList(int, int, int, TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(int, int, int, TimeEntryVectorPtr)));
+    connect(m_manager, SIGNAL(recievedTimeEntriesList(uint, uint, uint, TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)));
     
     m_manager->listProjects();
     m_manager->listIssues();
     m_manager->listTimeEntries();
 }
 
-void MainWindow::setProjectData(int, int, int, ProjectVectorPtr)
+void MainWindow::setProjectData(uint, uint, uint, ProjectVectorPtr)
 {
     ui->tvProjects->setModel(&m_projectsModel);
     
@@ -57,12 +57,12 @@ void MainWindow::setProjectData(int, int, int, ProjectVectorPtr)
     ui->tvProjects->expandAll();
 }
 
-void MainWindow::setIssuesData(int, int, int, IssueVectorPtr)
+void MainWindow::setIssuesData(uint, uint, uint, IssueVectorPtr)
 {
     ui->tvIssues->setModel(&m_issuesModel);
 }
 
-void MainWindow::setTimeEntriesData(int, int, int, TimeEntryVectorPtr)
+void MainWindow::setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)
 {
     ui->tvTimeEntries->setModel(&m_timeEntriesModel);
 }

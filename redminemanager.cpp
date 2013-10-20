@@ -70,7 +70,7 @@ void RedMineManager::listProjects()
 {  
     RMReqProjects *req = new RMReqProjects(this);
     
-    connect(req, SIGNAL(recievedProjectList(int, int, int, ProjectVectorPtr)), this, SIGNAL(recievedProjectList(int, int, int, ProjectVectorPtr)));
+    connect(req, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)), this, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)));
     
     req->start();
 }
@@ -80,19 +80,19 @@ void RedMineManager::listIssues()
     RMReqIssues::Filters filters;
     RMReqIssues *req = new RMReqIssues(this, std::move(filters));
     
-    connect(req, SIGNAL(recievedIssueList(int, int, int, IssueVectorPtr)), this, SIGNAL(recievedIssuesList(int, int, int, IssueVectorPtr)));
+    connect(req, SIGNAL(recievedIssueList(uint, uint, uint, IssueVectorPtr)), this, SIGNAL(recievedIssuesList(uint, uint, uint, IssueVectorPtr)));
     
     req->start();
 }
 
-void RedMineManager::listTimeEntries(int offset)
+void RedMineManager::listTimeEntries(uint offset)
 {
     RMReqTimeEntry::Filters filters;
     filters.offset = offset;
     
     RMReqTimeEntry *req = new RMReqTimeEntry(this, std::move(filters));
     
-    connect(req, SIGNAL(recievedTimeEntryList(int, int, int, TimeEntryVectorPtr)), this, SIGNAL(recievedTimeEntriesList(int, int, int, TimeEntryVectorPtr)));
+    connect(req, SIGNAL(recievedTimeEntryList(uint, uint, uint, TimeEntryVectorPtr)), this, SIGNAL(recievedTimeEntriesList(uint, uint, uint, TimeEntryVectorPtr)));
     
     req->start();
 }

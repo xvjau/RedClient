@@ -66,7 +66,7 @@ ProjectsModel::ProjectsModel(QObject* parent):
 {
 }
 
-void ProjectsModel::setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr projectList)
+void ProjectsModel::setProjectData(uint limit, uint offset, uint totalCount, ProjectVectorPtr projectList)
 {
 #warning TODO Allow for multiple HTTP requests
     // clear data

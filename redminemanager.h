@@ -50,9 +50,9 @@ protected slots:
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     
 signals:
-    void recievedProjectList(int limit, int offset, int totalCount, ProjectVectorPtr projects);
-    void recievedIssuesList(int limit, int offset, int totalCount, IssueVectorPtr issues);
-    void recievedTimeEntriesList(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries);
+    void recievedProjectList(uint limit, uint offset, uint totalCount, ProjectVectorPtr projects);
+    void recievedIssuesList(uint limit, uint offset, uint totalCount, IssueVectorPtr issues);
+    void recievedTimeEntriesList(uint limit, uint offset, uint totalCount, TimeEntryVectorPtr timeEntries);
     
 public:
     const QMap<QString, QString>& extraHeaders() const { return m_extraHeaders; }
@@ -62,7 +62,7 @@ public:
 public slots:
     Q_INVOKABLE void listProjects();
     Q_INVOKABLE void listIssues();
-    Q_INVOKABLE void listTimeEntries(int offset = 0);
+    Q_INVOKABLE void listTimeEntries(uint offset = 0);
 };
 
 #endif // REDMINEMANAGER_H

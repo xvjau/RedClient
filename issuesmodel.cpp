@@ -72,7 +72,7 @@ IssuesModel::IssuesModel(QObject* parent):
 {
 }
 
-void IssuesModel::setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr issues)
+void IssuesModel::setIssuesData(uint limit, uint offset, uint totalCount, IssueVectorPtr issues)
 {
 #warning TODO Allow for multiple HTTP requests
     // clear data

@@ -83,12 +83,12 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override
     {
         processReply<RMIssue>(reply, "issues", 
-                              [this] (int limit, int offset, int totalCount, const IssueVectorPtr &data)
+                              [this] (uint limit, uint offset, uint totalCount, const IssueVectorPtr &data)
                               { emit recievedIssueList(limit, offset, totalCount, data); });
     }
 
 signals:
-    void recievedIssueList(int limit, int offset, int totalCount, IssueVectorPtr);
+    void recievedIssueList(uint limit, uint offset, uint totalCount, IssueVectorPtr);
 };
 
 #endif // RMREQISSUES_H

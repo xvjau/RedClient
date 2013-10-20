@@ -55,7 +55,7 @@ protected:
     virtual QUrl buildUrl() = 0;
     
     template<typename T>
-    void processReply(QNetworkReply *reply, const QString &objectName, std::function<void (int, int, int, const std::shared_ptr<std::vector<T>> &)> signalEmiter)
+    void processReply(QNetworkReply *reply, const QString &objectName, std::function<void (uint, uint, uint, const std::shared_ptr<std::vector<T>> &)> signalEmiter)
     {
         if (checkIfReplyIsForMe(reply))
         {    
@@ -69,9 +69,12 @@ protected:
             qDebug() << obj;
 #endif
             
-            int limit = obj.value("limit").toDouble(0);
-            int offset = obj.value("offset").toDouble(0);
-            int totalCount = obj.value("total_count").toDouble(0);
+            uint limit = obj.value("limit").toDouble(0);
+            uint offset = obj.value("offset").toDouble(0);
+            uint totalCount = obj.value("total_count").toDouble(0);
+            
+            if (limit)
+                data->reserve(limit);
             
             auto it = obj.find(objectName);
             
@@ -79,10 +82,9 @@ protected:
             {
                 auto list = it.value().toArray();
                 
-                for(auto issue : list)
+                for(auto item : list)
                 {
-                    T p(issue, m_manager);
-                    data->push_back(std::move(p));
+                    data->push_back(T(item, m_manager));
                 }
             }
             

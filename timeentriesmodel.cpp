@@ -27,7 +27,7 @@ TimeEntriesModel::TimeEntriesModel(RedMineManager* manager, QObject* parent):
     QAbstractTableModel(parent),
     m_manager(manager)
 {
-    connect(m_manager, SIGNAL(recievedTimeEntriesList(int,int,int,TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(int,int,int,TimeEntryVectorPtr)));
+    connect(m_manager, SIGNAL(recievedTimeEntriesList(uint,uint,uint,TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(uint,uint,uint,TimeEntryVectorPtr)));
 }
 
 int TimeEntriesModel::columnCount(const QModelIndex&) const
@@ -101,9 +101,9 @@ bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex&)
     return false;
 }
 
-void TimeEntriesModel::setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries)
+void TimeEntriesModel::setTimeEntriesData(uint limit, uint offset, uint totalCount, TimeEntryVectorPtr timeEntries)
 {
-    int last = offset + limit - 1;
+    uint last = offset + limit - 1;
     if (last > totalCount)
         last = totalCount - 1;
     

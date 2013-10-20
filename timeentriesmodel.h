@@ -50,7 +50,7 @@ private:
     bool                m_canFetchMore = false;
     
 public slots:
-    void setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries);
+    void setTimeEntriesData(uint limit, uint offset, uint totalCount, TimeEntryVectorPtr timeEntries);
 
 };
 
