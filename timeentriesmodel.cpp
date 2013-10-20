@@ -30,12 +30,12 @@ TimeEntriesModel::TimeEntriesModel(RedMineManager* manager, QObject* parent):
     connect(m_manager, SIGNAL(recievedTimeEntriesList(int,int,int,TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(int,int,int,TimeEntryVectorPtr)));
 }
 
-int TimeEntriesModel::columnCount(const QModelIndex& parent) const
+int TimeEntriesModel::columnCount(const QModelIndex&) const
 {
     return 9;
 }
 
-int TimeEntriesModel::rowCount(const QModelIndex& parent) const
+int TimeEntriesModel::rowCount(const QModelIndex&) const
 {
     return m_timeEntriesData ? m_timeEntriesData->size() : 0;
 }
@@ -89,13 +89,13 @@ QVariant TimeEntriesModel::headerData(int section, Qt::Orientation orientation, 
     return QVariant();
 }
 
-bool TimeEntriesModel::insertRows(int row, int count, const QModelIndex& parent)
+bool TimeEntriesModel::insertRows(int row, int count, const QModelIndex&)
 {
 #warning TODO
     return false;
 }
 
-bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex& parent)
+bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex&)
 {
 #warning TODO
     return false;
@@ -118,8 +118,6 @@ void TimeEntriesModel::setTimeEntriesData(int limit, int offset, int totalCount,
         if (totalCount > 0)
             data->reserve(totalCount);
         
-        qDebug() << offset << "," << data->size();
-        
         if (offset >= data->size())
         {
             for(auto &it : *timeEntries)
@@ -134,17 +132,3 @@ void TimeEntriesModel::setTimeEntriesData(int limit, int offset, int totalCount,
     
     endInsertRows();
 }
-
-bool TimeEntriesModel::canFetchMore(const QModelIndex& parent) const
-{
-    return m_canFetchMore;
-}
-
-void TimeEntriesModel::fetchMore(const QModelIndex& parent)
-{
-    if (m_timeEntriesData && m_timeEntriesData->size())
-    {
-        m_manager->listTimeEntries(m_timeEntriesData->size());
-    }
-}
-

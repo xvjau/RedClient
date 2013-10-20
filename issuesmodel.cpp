@@ -39,6 +39,8 @@ public:
     
     virtual QVariant data(int _col, int _role = Qt::DisplayRole) const 
     {
+        Q_UNUSED(_role);
+        
         switch(_col)
         {
             case 0: return m_issue.id();
@@ -72,6 +74,7 @@ IssuesModel::IssuesModel(QObject* parent):
 
 void IssuesModel::setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr issues)
 {
+#warning TODO Allow for multiple HTTP requests
     // clear data
     m_rootItem = std::make_shared<AbstractModelItem>();
     

@@ -29,6 +29,7 @@
 #include <QAuthenticator>
 #include <QApplication>
 #include <QSettings>
+#include <QNetworkConfigurationManager>
 
 static void __registerClass() __attribute__((constructor));
 
@@ -47,7 +48,6 @@ RedMineManager::RedMineManager(QUrl url):
     
     if (settings.contains("AccessKey"))
         m_extraHeaders.insert("X-Redmine-API-Key", settings.value("AccessKey").toString());
-
 }
 
 RedMineManager::~RedMineManager()

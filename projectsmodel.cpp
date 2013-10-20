@@ -39,6 +39,8 @@ public:
     
     virtual QVariant data(int _col, int _role = Qt::DisplayRole) const 
     {
+        Q_UNUSED(_role);
+        
         switch(_col)
         {
             case 0: return m_project.id(); 
@@ -54,6 +56,7 @@ public:
     
     virtual bool setData(int _col, const QVariant &_value) 
     {
+#warning TODO Update project
         return false;
     }
 };
@@ -65,6 +68,7 @@ ProjectsModel::ProjectsModel(QObject* parent):
 
 void ProjectsModel::setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr projectList)
 {
+#warning TODO Allow for multiple HTTP requests
     // clear data
     m_rootItem = std::make_shared<AbstractModelItem>();
     

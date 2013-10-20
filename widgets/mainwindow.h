@@ -50,9 +50,9 @@ private:
     TimeEntriesModel m_timeEntriesModel;
 
 private slots:
-    void setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr);
-    void setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr);
-    void setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr);    
+    void setProjectData(int, int, int, ProjectVectorPtr);
+    void setIssuesData(int, int, int, IssueVectorPtr);
+    void setTimeEntriesData(int, int, int, TimeEntryVectorPtr);    
 };
 
 #endif // MAINWINDOW_H

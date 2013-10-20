@@ -45,7 +45,7 @@ private:
     
     QUrl                    m_baseUrl;
     QNetworkAccessManager   m_accessManager;
-        
+    
 protected slots:
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     

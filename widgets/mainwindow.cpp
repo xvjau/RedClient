@@ -43,7 +43,7 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     m_manager->listTimeEntries();
 }
 
-void MainWindow::setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr)
+void MainWindow::setProjectData(int, int, int, ProjectVectorPtr)
 {
     ui->tvProjects->setModel(&m_projectsModel);
     
@@ -57,12 +57,12 @@ void MainWindow::setProjectData(int limit, int offset, int totalCount, ProjectVe
     ui->tvProjects->expandAll();
 }
 
-void MainWindow::setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr)
+void MainWindow::setIssuesData(int, int, int, IssueVectorPtr)
 {
     ui->tvIssues->setModel(&m_issuesModel);
 }
 
-void MainWindow::setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr)
+void MainWindow::setTimeEntriesData(int, int, int, TimeEntryVectorPtr)
 {
     ui->tvTimeEntries->setModel(&m_timeEntriesModel);
 }
