@@ -63,7 +63,7 @@ ProjectsModel::ProjectsModel(QObject* parent):
 {
 }
 
-void ProjectsModel::setProjectData(int limit, int offset, ProjectVectorPtr projectList)
+void ProjectsModel::setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr projectList)
 {
     // clear data
     m_rootItem = std::make_shared<AbstractModelItem>();

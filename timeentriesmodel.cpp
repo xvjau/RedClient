@@ -19,7 +19,16 @@
  */
 
 #include "timeentriesmodel.h"
+#include "redminemanager.h"
 #include <cassert>
+#include <QDebug>
+
+TimeEntriesModel::TimeEntriesModel(RedMineManager* manager, QObject* parent): 
+    QAbstractTableModel(parent),
+    m_manager(manager)
+{
+    connect(m_manager, SIGNAL(recievedTimeEntriesList(int,int,int,TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(int,int,int,TimeEntryVectorPtr)));
+}
 
 int TimeEntriesModel::columnCount(const QModelIndex& parent) const
 {
@@ -28,7 +37,7 @@ int TimeEntriesModel::columnCount(const QModelIndex& parent) const
 
 int TimeEntriesModel::rowCount(const QModelIndex& parent) const
 {
-    return m_timeEntriesData->size();
+    return m_timeEntriesData ? m_timeEntriesData->size() : 0;
 }
 
 QVariant TimeEntriesModel::data(const QModelIndex& index, int role) const
@@ -92,9 +101,46 @@ bool TimeEntriesModel::removeRows(int row, int count, const QModelIndex& parent)
     return false;
 }
 
-void TimeEntriesModel::setTimeEntriesData(int limit, int offset, TimeEntryVectorPtr timeEntries)
+void TimeEntriesModel::setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries)
 {
-    m_timeEntriesData = timeEntries;
+    beginInsertRows(QModelIndex(), offset, offset + limit);
+    
+    if (!m_timeEntriesData)
+        m_timeEntriesData = timeEntries;
+    else
+    {
+        auto data = m_timeEntriesData.get();
+        
+        if (totalCount > 0)
+            data->reserve(totalCount);
+        
+        qDebug() << offset << "," << data->size();
+        
+        if (offset >= data->size())
+        {
+            for(auto &it : *timeEntries)
+            {
+                data->push_back(std::move(it));
+            }
+        }
+    }
+    
+    if (m_timeEntriesData->size() < totalCount)
+        m_manager->listTimeEntries(m_timeEntriesData->size());
+    
+    endInsertRows();
 }
 
-#include "timeentriesmodel.moc"
+bool TimeEntriesModel::canFetchMore(const QModelIndex& parent) const
+{
+    return m_canFetchMore;
+}
+
+void TimeEntriesModel::fetchMore(const QModelIndex& parent)
+{
+    if (m_timeEntriesData && m_timeEntriesData->size())
+    {
+        m_manager->listTimeEntries(m_timeEntriesData->size());
+    }
+}
+

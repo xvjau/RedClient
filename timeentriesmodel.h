@@ -24,11 +24,15 @@
 #include <QAbstractTableModel>
 #include "rmtimeentry.h"
 
+class RedMineManager;
+
 class TimeEntriesModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
+    explicit TimeEntriesModel(RedMineManager *manager, QObject* parent = 0);
+    
     virtual int columnCount(const QModelIndex& parent) const override;
     virtual int rowCount(const QModelIndex& parent) const override;
     
@@ -40,11 +44,16 @@ public:
     virtual bool insertRows(int row, int count, const QModelIndex& parent) override;
     virtual bool removeRows(int row, int count, const QModelIndex& parent) override;
     
+    virtual bool canFetchMore(const QModelIndex& parent) const override;
+    virtual void fetchMore(const QModelIndex& parent) override;
+    
 private:
-    TimeEntryVectorPtr m_timeEntriesData;
+    RedMineManager      *m_manager = nullptr;
+    TimeEntryVectorPtr  m_timeEntriesData;
+    bool                m_canFetchMore = false;
     
 public slots:
-    void setTimeEntriesData(int limit, int offset, TimeEntryVectorPtr timeEntries);
+    void setTimeEntriesData(int limit, int offset, int totalCount, TimeEntryVectorPtr timeEntries);
 
 };
 

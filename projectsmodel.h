@@ -32,7 +32,7 @@ public:
     explicit ProjectsModel(QObject* parent = 0);
     
 public slots:
-    void setProjectData(int limit, int offset, ProjectVectorPtr projectList);
+    void setProjectData(int limit, int offset, int totalCount, ProjectVectorPtr projectList);
     
 public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

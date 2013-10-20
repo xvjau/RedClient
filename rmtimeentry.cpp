@@ -31,6 +31,10 @@ static void __registerClass()
     qRegisterMetaType<RMTimeEntry*>("RMTimeEntry");
 }
 
+RMTimeEntry::RMTimeEntry(): QObject()
+{
+}
+
 RMTimeEntry::RMTimeEntry(RMTimeEntry&& other): 
     QObject(other.parent()),
     m_id(other.m_id),

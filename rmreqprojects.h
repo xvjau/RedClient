@@ -42,12 +42,12 @@ protected:
     virtual void replyFinished(QNetworkReply* reply) override
     {
         processReply<RMProject>(reply, "projects", 
-                                [this] (int limit, int offset, const ProjectVectorPtr &data)
-                                { emit recievedProjectList(limit, offset, data); });
+                                [this] (int limit, int offset, int totalCount, const ProjectVectorPtr &data)
+                                { emit recievedProjectList(limit, offset, totalCount, data); });
     }
     
 signals:
-    void recievedProjectList(int limit, int offset, ProjectVectorPtr projects);
+    void recievedProjectList(int limit, int offset, int totalCount, ProjectVectorPtr projects);
 };
 
 #endif // RMREQPROJECTS_H

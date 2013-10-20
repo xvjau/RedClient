@@ -24,33 +24,51 @@
 #include "rmrequest.h"
 #include "rmtimeentry.h"
 
+#include <QUrlQuery>
+
 class RMReqTimeEntry : public RMRequest
 {
     Q_OBJECT
 
 public:
-    explicit RMReqTimeEntry(RedMineManager* manager): 
-        RMRequest(manager)
+    struct Filters
+    {
+        int offset = 0;
+    };
+    
+    explicit RMReqTimeEntry(RedMineManager* manager, Filters filters): 
+        RMRequest(manager),
+        m_filers(filters)
     {
     }
     
 protected:
+    Filters m_filers;
+    
     virtual QUrl buildUrl()
     {
         QUrl result(m_manager->baseUrl());
         result.setPath("/time_entries.json");
+        
+        QUrlQuery query;
+        
+        if (m_filers.offset)
+            query.addQueryItem("offset", QString::number(m_filers.offset));
+        
+        result.setQuery(query);
+        
         return result;
     }
     
     virtual void replyFinished(QNetworkReply* reply) override
     {
         processReply<RMTimeEntry>(reply, "time_entries", 
-                                  [this] (int limit, int offset, const TimeEntryVectorPtr &data)
-                                  { emit recievedTimeEntryList(limit, offset, data); });
+                                  [this] (int limit, int offset, int totalCount, const TimeEntryVectorPtr &data)
+                                  { emit recievedTimeEntryList(limit, offset, totalCount, data); });
     }
 
 signals:
-    void recievedTimeEntryList(int limit, int offset, TimeEntryVectorPtr);
+    void recievedTimeEntryList(int limit, int offset, int totalCount, TimeEntryVectorPtr);
 
 };
 

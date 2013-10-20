@@ -40,6 +40,7 @@ class RMTimeEntry: public QObject
     Q_OBJECT
     
 public:
+    RMTimeEntry();
     RMTimeEntry(RMTimeEntry &&other);
     RMTimeEntry(const QJsonValueRef &json, RedMineManager *manager, QObject *parent = nullptr);
     explicit RMTimeEntry(RedMineManager *manager, QObject *parent = nullptr);

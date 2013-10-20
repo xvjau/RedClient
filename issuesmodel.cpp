@@ -70,7 +70,7 @@ IssuesModel::IssuesModel(QObject* parent):
 {
 }
 
-void IssuesModel::setIssuesData(int limit, int offset, IssueVectorPtr issues)
+void IssuesModel::setIssuesData(int limit, int offset, int totalCount, IssueVectorPtr issues)
 {
     // clear data
     m_rootItem = std::make_shared<AbstractModelItem>();
