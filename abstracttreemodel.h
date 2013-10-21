@@ -1,7 +1,7 @@
 #ifndef ABSTRACTTREEMODEL_H
 #define ABSTRACTTREEMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
+#include <QAbstractItemModel>
 #include <memory>
 #include <functional>
 
