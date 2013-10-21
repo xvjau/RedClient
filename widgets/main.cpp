@@ -2,7 +2,7 @@
 
 #include "redminemanager.h"
 
-#include "widgets/mainwindow.h"
+#include "mainwindow.h"
 
 #include <QQuickWindow>
 #include <QQmlEngine>
