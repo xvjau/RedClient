@@ -25,3 +25,4 @@ Makefile
 #KDevelop
 .kdev4/
 *.user
+.kdev_include_paths
