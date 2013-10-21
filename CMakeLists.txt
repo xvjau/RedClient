@@ -1,6 +1,9 @@
 project(RedClient)
 cmake_minimum_required(VERSION 2.8)
+
 find_package(Qt5 COMPONENTS Gui Widgets Qml Quick Sql)
+include_directories(${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Qml_INCLUDE_DIRS} ${Qt5Quick_INCLUDE_DIRS} ${Qt5Sql_INCLUDE_DIRS})
+add_definitions(${Qt5Widgets_DEFINITIONS})
 
 set(ENABLE_LTO FALSE CACHE BOOL "Enable Link-Time optimization")
 if (${ENABLE_LTO})
@@ -18,9 +21,9 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 
-add_definitions(${Qt5Widgets_DEFINITIONS} -std=c++11 -fPIC -fPIE -Wall -Wextra)
+add_definitions(-std=c++11 -fPIC -fPIE -Wall -Wextra)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Qml_INCLUDE_DIRS} ${Qt5Quick_INCLUDE_DIRS} ${Qt5Sql_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 FILE(GLOB QML_FILES "qml/*.qml")
 
@@ -70,6 +73,7 @@ set(RedClient_SRCS
     redminemanager.cpp 
     
     login.cpp)
+
 
 qt5_wrap_ui(UI_SRCS login.ui)
 
