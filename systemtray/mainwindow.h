@@ -23,17 +23,19 @@
 
 #include <QMainWindow>
 
-#include "../redminemanager.h"
-#include "../projectsmodel.h"
-#include "../issuesmodel.h"
-#include "../timeentriesmodel.h"
+#include "redminemanager.h"
+#include "projectsmodel.h"
+#include "issuesmodel.h"
+#include "timeentriesmodel.h"
+
+class QSortFilterProxyModel;
 
 namespace Ui
 {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
@@ -48,11 +50,15 @@ private:
     ProjectsModel   m_projectsModel;
     IssuesModel     m_issuesModel;
     TimeEntriesModel m_timeEntriesModel;
+    
+    QSortFilterProxyModel   *m_issuesProxyModel;
 
 private slots:
     void setProjectData(uint, uint, uint, ProjectVectorPtr);
     void setIssuesData(uint, uint, uint, IssueVectorPtr);
-    void setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr);    
+    void setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr);
+    
+    void viewDoubleClicked(QModelIndex index);
 };
 
 #endif // MAINWINDOW_H

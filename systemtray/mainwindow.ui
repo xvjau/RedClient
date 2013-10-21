@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>346</height>
+    <width>511</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableView" name="tableView"/>
+    <widget class="QTableView" name="tvIssues"/>
    </item>
   </layout>
  </widget>

@@ -34,8 +34,14 @@ public:
 public slots:
     void setIssuesData(uint limit, uint offset, uint totalCount, IssueVectorPtr issues);
     
+protected:
+    QModelIndex m_selected;
+    
 public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    virtual QVariant data(const QModelIndex& index, int role) const override;
+    
+    Q_INVOKABLE void setSelected(QModelIndex _index);
 };
 
 #endif // ISSUESMODEL_H

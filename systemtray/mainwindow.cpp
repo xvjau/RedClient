@@ -22,13 +22,18 @@
 
 #include "ui_mainwindow.h"
 
+#include <QSortFilterProxyModel>
+
 MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlags flags): 
-    QMainWindow(parent, flags),
+    QWidget(parent, flags),
     m_manager(_manager),
-    m_timeEntriesModel(_manager)
+    m_timeEntriesModel(_manager),
+    m_issuesProxyModel(new QSortFilterProxyModel(this))
 {
     ui = new Ui::MainWindow();
     ui->setupUi(this);
+    
+    connect(ui->tvIssues, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(viewDoubleClicked(QModelIndex)));
     
     connect(m_manager, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)), &m_projectsModel, SLOT(setProjectData(uint, uint, uint, ProjectVectorPtr)));
     connect(m_manager, SIGNAL(recievedProjectList(uint, uint, uint, ProjectVectorPtr)), this, SLOT(setProjectData(uint, uint, uint, ProjectVectorPtr)));
@@ -41,6 +46,8 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     m_manager->listProjects();
     m_manager->listIssues();
     m_manager->listTimeEntries();
+    
+    ui->tvIssues->setModel(m_issuesProxyModel);
 }
 
 void MainWindow::setProjectData(uint, uint, uint, ProjectVectorPtr)
@@ -49,10 +56,15 @@ void MainWindow::setProjectData(uint, uint, uint, ProjectVectorPtr)
 
 void MainWindow::setIssuesData(uint, uint, uint, IssueVectorPtr)
 {
+    m_issuesProxyModel->setSourceModel(&m_issuesModel);
+    ui->tvIssues->hideColumn(0);
 }
 
 void MainWindow::setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)
 {
 }
 
-
+void MainWindow::viewDoubleClicked(QModelIndex index)
+{
+    m_issuesModel.setSelected(m_issuesProxyModel->mapToSource(index));
+}

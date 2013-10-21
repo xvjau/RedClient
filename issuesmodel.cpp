@@ -21,7 +21,7 @@
 #include "issuesmodel.h"
 
 #include <unordered_map>
-
+#include <QFont>
 #include <cassert>
 
 class IssuesModelItem: public AbstractModelItem 
@@ -92,26 +92,67 @@ void IssuesModel::setIssuesData(uint limit, uint offset, uint totalCount, IssueV
 
 QVariant IssuesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole)
     {
-        assert(section < 13);
-        
-        switch(section)
+        if (orientation == Qt::Horizontal)
         {
-             case 0: return tr("id");
-             case 1: return tr("subject");
-             case 2: return tr("status");
-             case 3: return tr("createdOn");
-             case 4: return tr("author");
-             case 5: return tr("project");
-             case 6: return tr("tracker");
-             case 7: return tr("assignedTo");
-             case 8: return tr("updatedOn");
-             case 9: return tr("startDate");
-             case 10: return tr("doneRatio");
-             case 11: return tr("description");
-             case 12: return tr("priority");
+            assert(section < 13);
+            
+            switch(section)
+            {
+                case 0: return tr("id");
+                case 1: return tr("subject");
+                case 2: return tr("status");
+                case 3: return tr("createdOn");
+                case 4: return tr("author");
+                case 5: return tr("project");
+                case 6: return tr("tracker");
+                case 7: return tr("assignedTo");
+                case 8: return tr("updatedOn");
+                case 9: return tr("startDate");
+                case 10: return tr("doneRatio");
+                case 11: return tr("description");
+                case 12: return tr("priority");
+            }
+        }
+        else
+        {
+            if (section < m_rootItem->m_children.size())
+                return m_rootItem->m_children[section]->data(0);
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
+}
+
+QVariant IssuesModel::data(const QModelIndex& index, int role) const
+{
+    if (role == Qt::FontRole && index.row() == m_selected.row() && index.parent() == m_selected.parent())
+    {
+        
+        QFont result = AbstractTreeModel::data(index, role).value<QFont>();
+        result.setBold(true);
+        return result;
+    }
+    return AbstractTreeModel::data(index, role);
+}
+
+void IssuesModel::setSelected(QModelIndex _index)
+{
+    QModelIndex oldTopLeft, oldBottomRight;
+    
+    if (m_selected.isValid())
+    {
+        oldTopLeft = index(m_selected.row(), 0, m_selected.parent());
+        oldBottomRight = index(m_selected.row(), columnCount(m_selected.parent()) - 1, m_selected.parent());
+    }
+    
+    m_selected = _index;
+    
+    QModelIndex topLeft = index(m_selected.row(), 0, m_selected.parent());
+    QModelIndex bottomRight = index(m_selected.row(), columnCount(m_selected.parent()) - 1, m_selected.parent());
+    
+    if (oldTopLeft.isValid())
+        emit dataChanged(oldTopLeft, oldBottomRight, {Qt::FontRole});
+    
+    emit dataChanged(topLeft, bottomRight, {Qt::FontRole});
 }
