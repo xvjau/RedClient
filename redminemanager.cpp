@@ -67,7 +67,7 @@ void RedMineManager::authenticationRequired(QNetworkReply* reply, QAuthenticator
     authenticator->setPassword(dlg.password());
 }
 
-void RedMineManager::listProjects()
+void RedMineManager::listProjects(uint offset)
 {  
     RMReqProjects *req = new RMReqProjects(this);
     
@@ -76,9 +76,11 @@ void RedMineManager::listProjects()
     req->start();
 }
 
-void RedMineManager::listIssues()
+void RedMineManager::listIssues(uint offset)
 {
     RMReqIssues::Filters filters;
+    filters.status = RMIssue::isAll;
+    filters.offset = offset;
     RMReqIssues *req = new RMReqIssues(this, std::move(filters));
     
     connect(req, SIGNAL(recievedIssueList(uint, uint, uint, IssueVectorPtr)), this, SIGNAL(recievedIssuesList(uint, uint, uint, IssueVectorPtr)));

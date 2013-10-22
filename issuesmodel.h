@@ -21,26 +21,36 @@
 #ifndef ISSUESMODEL_H
 #define ISSUESMODEL_H
 
-#include "abstracttreemodel.h"
+#include <QAbstractTableModel>
+
 #include "rmissue.h"
 
-class IssuesModel : public AbstractTreeModel
+class IssuesModel : public QAbstractTableModel
 {
     Q_OBJECT
     
 public:
-    explicit IssuesModel(QObject* parent = 0);
+    explicit IssuesModel(RedMineManager  *manager, QObject* parent = 0);
+    
+    virtual int columnCount(const QModelIndex&) const override;
+    virtual int rowCount(const QModelIndex&) const override;
+    
+    virtual QVariant data(const QModelIndex& index, int role) const override;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    
+    virtual bool insertRows(int row, int count, const QModelIndex&) override;
+    virtual bool removeRows(int row, int count, const QModelIndex&) override;
+    
+protected:
+    RedMineManager  *m_manager = nullptr;
+    IssueVectorPtr  m_issuesData;
+
+    QModelIndex m_selected;
     
 public slots:
     void setIssuesData(uint limit, uint offset, uint totalCount, IssueVectorPtr issues);
-    
-protected:
-    QModelIndex m_selected;
-    
-public:
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    virtual QVariant data(const QModelIndex& index, int role) const override;
-    
     Q_INVOKABLE void setSelected(QModelIndex _index);
 };
 

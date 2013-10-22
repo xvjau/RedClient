@@ -20,74 +20,58 @@
 
 #include "issuesmodel.h"
 
+#include "redminemanager.h"
+
 #include <unordered_map>
 #include <QFont>
 #include <cassert>
 
-class IssuesModelItem: public AbstractModelItem 
-{
-private:
-    RMIssue m_issue;
-public:
-    IssuesModelItem(RMIssue &&_issue, AbstractModelItem *_parent = nullptr):
-    AbstractModelItem(_parent),
-        m_issue(std::move(_issue))
-    {
-    }
-       
-    virtual int columnCount() const { return 13; }
-    
-    virtual QVariant data(int _col, int _role = Qt::DisplayRole) const 
-    {
-        Q_UNUSED(_role);
-        
-        switch(_col)
-        {
-            case 0: return m_issue.id();
-            case 1: return m_issue.subject();
-            case 2: return m_issue.status().name();
-            case 3: return m_issue.createdOn();
-            case 4: return m_issue.author().name();
-            case 5: return m_issue.project().name();
-            case 6: return m_issue.tracker().name();
-            case 7: return m_issue.assignedTo().name();
-            case 8: return m_issue.updatedOn();
-            case 9: return m_issue.startDate();
-            case 10: return m_issue.doneRatio();
-            case 11: return m_issue.description();
-            case 12: return m_issue.priority().name();
-            
-        }
-        return QVariant();
-    }
-    
-    virtual bool setData(int _col, const QVariant &_value) 
-    {
-        return false;
-    }
-};
-
-IssuesModel::IssuesModel(QObject* parent): 
-    AbstractTreeModel(parent)
+IssuesModel::IssuesModel(RedMineManager* manager, QObject* parent): 
+    QAbstractTableModel(parent),
+    m_manager(manager)
 {
 }
 
 void IssuesModel::setIssuesData(uint limit, uint offset, uint totalCount, IssueVectorPtr issues)
 {
-#warning TODO Allow for multiple HTTP requests
-    // clear data
-    m_rootItem = std::make_shared<AbstractModelItem>();
+    uint last = offset + limit - 1;
+    if (last > totalCount)
+        last = totalCount - 1;
     
-    auto &data = *issues.get();
+    beginInsertRows(QModelIndex(), offset, last);
     
-    int row = 0;
-    
-    for(auto &issue : data)
+    if (!m_issuesData)
+        m_issuesData = issues;
+    else
     {
-        auto item = std::make_shared<IssuesModelItem>(std::move(issue), m_rootItem.get());
-        item->m_row = row++;
-        m_rootItem->m_children.push_back(std::move(item));
+        auto data = m_issuesData.get();
+        
+        if (totalCount > 0)
+            data->reserve(totalCount);
+        
+        if (offset >= data->size())
+        {
+            for(auto &it : *issues)
+            {
+                data->push_back(std::move(it));
+            }
+        }
     }
+    
+    if (m_issuesData->size() < totalCount)
+        m_manager->listIssues(m_issuesData->size());
+    
+    endInsertRows();
+}
+
+int IssuesModel::columnCount(const QModelIndex& ) const
+{
+    return 13;
+}
+
+int IssuesModel::rowCount(const QModelIndex& ) const
+{
+    return m_issuesData ? m_issuesData->size() : 0;
 }
 
 QVariant IssuesModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -115,25 +99,63 @@ QVariant IssuesModel::headerData(int section, Qt::Orientation orientation, int r
                 case 12: return tr("priority");
             }
         }
-        else
-        {
-            if (section < m_rootItem->m_children.size())
-                return m_rootItem->m_children[section]->data(0);
-        }
     }
-    return QAbstractItemModel::headerData(section, orientation, role);
+    return QVariant();
 }
 
 QVariant IssuesModel::data(const QModelIndex& index, int role) const
 {
-    if (role == Qt::FontRole && index.row() == m_selected.row() && index.parent() == m_selected.parent())
+    switch(role)
     {
-        
-        QFont result = AbstractTreeModel::data(index, role).value<QFont>();
-        result.setBold(true);
-        return result;
+        case Qt::FontRole:
+            if (index.row() == m_selected.row() && index.parent() == m_selected.parent())
+            {
+                QFont result;
+                result.setBold(true);
+                return result;
+            }
+            break;
+            
+        case Qt::DisplayRole:
+        {
+            assert(index.row() <= m_issuesData->size());
+            const auto &row = (*m_issuesData)[index.row()];
+            
+            switch(index.column())
+            {
+                case 0: return row.id();
+                case 1: return row.subject();
+                case 2: return row.status().name();
+                case 3: return row.createdOn();
+                case 4: return row.author().name();
+                case 5: return row.project().name();
+                case 6: return row.tracker().name();
+                case 7: return row.assignedTo().name();
+                case 8: return row.updatedOn();
+                case 9: return row.startDate();
+                case 10: return row.doneRatio();
+                case 11: return row.description();
+                case 12: return row.priority().name();   
+            }
+            break;
+        }
     }
-    return AbstractTreeModel::data(index, role);
+    return QVariant();
+}
+
+bool IssuesModel::insertRows(int row, int count, const QModelIndex& )
+{
+    return false;
+}
+
+bool IssuesModel::removeRows(int row, int count, const QModelIndex& )
+{
+    return false;
+}
+
+bool IssuesModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    return false;
 }
 
 void IssuesModel::setSelected(QModelIndex _index)

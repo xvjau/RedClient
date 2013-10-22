@@ -28,6 +28,7 @@
 MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlags flags): 
     QWidget(parent, flags),
     m_manager(_manager),
+    m_issuesModel(_manager),
     m_timeEntriesModel(_manager),
     m_issuesProxyModel(new QSortFilterProxyModel(this))
 {

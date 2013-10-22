@@ -47,7 +47,6 @@ public:
 private:
     RedMineManager      *m_manager = nullptr;
     TimeEntryVectorPtr  m_timeEntriesData;
-    bool                m_canFetchMore = false;
     
 public slots:
     void setTimeEntriesData(uint limit, uint offset, uint totalCount, TimeEntryVectorPtr timeEntries);

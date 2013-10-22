@@ -33,10 +33,11 @@ class RMReqIssues : public RMRequest
 public:
     struct Filters
     {
+        uint offset = 0;
         QVariant projectId;
         QVariant subProjectId;
         QVariant trackerId;
-        RMIssue::Status status = RMIssue::isAll;
+        RMIssue::Status status = RMIssue::isOpen;
         QVariant assignedTo;
     };
     
@@ -56,6 +57,11 @@ protected:
         
         QUrlQuery query;
         
+        if (m_filters.offset)
+        {
+            query.addQueryItem("offset", QString::number(m_filters.offset));
+        }
+        
         if (!m_filters.projectId.isNull())
         {
             query.addQueryItem("project_id", m_filters.projectId.toString());
@@ -67,8 +73,8 @@ protected:
         if (!m_filters.trackerId.isNull())
             query.addQueryItem("tracker_id", m_filters.trackerId.toString());
         
-        if (m_filters.status != RMIssue::isAll)
-            query.addQueryItem("status_id", (m_filters.status == RMIssue::isOpen ? "open" : "closed"));
+        if (m_filters.status != RMIssue::isOpen)
+            query.addQueryItem("status_id", (m_filters.status == RMIssue::isClosed ? "closed" : "*"));
         
         if (!m_filters.assignedTo.isNull())
             query.addQueryItem("assigned_to_id", m_filters.assignedTo.toString());

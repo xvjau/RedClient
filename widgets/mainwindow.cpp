@@ -25,6 +25,7 @@
 MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlags flags): 
     QMainWindow(parent, flags),
     m_manager(_manager),
+    m_issuesModel(_manager),
     m_timeEntriesModel(_manager)
 {
     ui = new Ui::MainWindow();

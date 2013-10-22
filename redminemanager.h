@@ -62,8 +62,8 @@ public:
     QNetworkAccessManager   *accessManager() { return &m_accessManager; }
     
 public slots:
-    Q_INVOKABLE void listProjects();
-    Q_INVOKABLE void listIssues();
+    Q_INVOKABLE void listProjects(uint offset = 0);
+    Q_INVOKABLE void listIssues(uint offset = 0);
     Q_INVOKABLE void listTimeEntries(uint offset = 0);
     Q_INVOKABLE void listUsers(uint offset = 0);
 };
