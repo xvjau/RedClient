@@ -25,6 +25,7 @@
 #include "rmreqtimeentry.h"
 
 #include "login.h"
+#include "rmrequsers.h"
 
 #include <QAuthenticator>
 #include <QApplication>
@@ -97,5 +98,13 @@ void RedMineManager::listTimeEntries(uint offset)
     req->start();
 }
 
-
-#include "redminemanager.moc"
+void RedMineManager::listUsers(uint offset)
+{
+    RMReqUsers::Filters filters;
+    
+    RMReqUsers *req = new RMReqUsers(this, std::move(filters));
+    
+    connect(req, SIGNAL(recievedUserList(uint,uint,uint,UserVectorPtr)), this, SIGNAL(recievedUsersList(uint,uint,uint,UserVectorPtr)));
+    
+    req->start();
+}

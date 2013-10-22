@@ -23,6 +23,7 @@
 #include "ui_mainwindow.h"
 
 #include <QSortFilterProxyModel>
+#include <boost/concept_check.hpp>
 
 MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlags flags): 
     QWidget(parent, flags),
@@ -43,9 +44,13 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     
     connect(m_manager, SIGNAL(recievedTimeEntriesList(uint, uint, uint, TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)));
     
+    connect(m_manager, SIGNAL(recievedUsersList(uint,uint,uint,UserVectorPtr)), this, SLOT(setUsersData(uint,uint,uint,UserVectorPtr)));
+    connect(ui->cbUser, SIGNAL(activated(QString)), this, SLOT(userFilter(QString)));
+    
     m_manager->listProjects();
     m_manager->listIssues();
     m_manager->listTimeEntries();
+    m_manager->listUsers();
     
     ui->tvIssues->setModel(m_issuesProxyModel);
 }
@@ -67,4 +72,29 @@ void MainWindow::setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)
 void MainWindow::viewDoubleClicked(QModelIndex index)
 {
     m_issuesModel.setSelected(m_issuesProxyModel->mapToSource(index));
+}
+
+void MainWindow::setUsersData(uint, uint, uint, UserVectorPtr users)
+{
+    ui->cbUser->clear();
+    ui->cbUser->addItem("[All]");
+        
+    for(const auto &user : *(users.get()))
+    {
+        QString name = user.firstName();
+        if (!user.lastName().isEmpty())
+            name += " " + user.lastName();
+        ui->cbUser->addItem(name);
+    }
+}
+
+void MainWindow::userFilter(const QString& userName)
+{
+    if (userName.isEmpty() || userName.compare("[All]") == 0)
+        m_issuesProxyModel->setFilterFixedString(QString());
+    else
+    {
+        m_issuesProxyModel->setFilterKeyColumn(7);
+        m_issuesProxyModel->setFilterWildcard(userName);
+    }
 }

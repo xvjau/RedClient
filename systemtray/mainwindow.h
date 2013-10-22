@@ -27,6 +27,7 @@
 #include "projectsmodel.h"
 #include "issuesmodel.h"
 #include "timeentriesmodel.h"
+#include "usersmodel.h"
 
 class QSortFilterProxyModel;
 
@@ -47,9 +48,9 @@ private:
     
     RedMineManager  *m_manager;
     
-    ProjectsModel   m_projectsModel;
-    IssuesModel     m_issuesModel;
-    TimeEntriesModel m_timeEntriesModel;
+    ProjectsModel       m_projectsModel;
+    IssuesModel         m_issuesModel;
+    TimeEntriesModel    m_timeEntriesModel;
     
     QSortFilterProxyModel   *m_issuesProxyModel;
 
@@ -57,8 +58,10 @@ private slots:
     void setProjectData(uint, uint, uint, ProjectVectorPtr);
     void setIssuesData(uint, uint, uint, IssueVectorPtr);
     void setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr);
+    void setUsersData(uint, uint, uint, UserVectorPtr);
     
     void viewDoubleClicked(QModelIndex index);
+    void userFilter(const QString& userName);
 };
 
 #endif // MAINWINDOW_H

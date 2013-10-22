@@ -58,17 +58,20 @@ set(RedClient_SRCS
     rmobjectsummary.cpp
     rmproject.cpp 
     rmissue.cpp 
-    rmtimeentry.cpp 
+    rmtimeentry.cpp     
+    rmuser.cpp
     
     rmrequest.cpp 
     rmreqprojects.h 
     rmreqissues.h
     rmreqtimeentry.h
+    rmrequsers.h
     
     abstracttreemodel.cpp 
     projectsmodel.cpp 
     issuesmodel.cpp
     timeentriesmodel.cpp
+    usersmodel.cpp
     
     redminemanager.cpp 
     
