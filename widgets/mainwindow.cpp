@@ -26,7 +26,8 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     QMainWindow(parent, flags),
     m_manager(_manager),
     m_issuesModel(_manager),
-    m_timeEntriesModel(_manager)
+    m_timeEntriesModel(_manager),
+    m_usersModel(_manager)
 {
     ui = new Ui::MainWindow();
     ui->setupUi(this);
@@ -39,9 +40,13 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     
     connect(m_manager, SIGNAL(recievedTimeEntriesList(uint, uint, uint, TimeEntryVectorPtr)), this, SLOT(setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)));
     
+    connect(m_manager, SIGNAL(recievedUsersList(uint,uint,uint,UserVectorPtr)), &m_usersModel, SLOT(setUsersData(uint,uint,uint,UserVectorPtr)));
+    connect(m_manager, SIGNAL(recievedUsersList(uint,uint,uint,UserVectorPtr)), this, SLOT(setUsersData(uint,uint,uint,UserVectorPtr)));
+    
     m_manager->listProjects();
     m_manager->listIssues();
     m_manager->listTimeEntries();
+    m_manager->listUsers();
 }
 
 void MainWindow::setProjectData(uint, uint, uint, ProjectVectorPtr)
@@ -68,4 +73,7 @@ void MainWindow::setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr)
     ui->tvTimeEntries->setModel(&m_timeEntriesModel);
 }
 
-
+void MainWindow::setUsersData(uint, uint, uint, UserVectorPtr)
+{
+    ui->tvUsers->setModel(&m_usersModel);
+}

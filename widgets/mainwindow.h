@@ -23,10 +23,11 @@
 
 #include <QMainWindow>
 
-#include "../redminemanager.h"
-#include "../projectsmodel.h"
-#include "../issuesmodel.h"
-#include "../timeentriesmodel.h"
+#include "redminemanager.h"
+#include "projectsmodel.h"
+#include "issuesmodel.h"
+#include "timeentriesmodel.h"
+#include "usersmodel.h"
 
 namespace Ui
 {
@@ -43,16 +44,18 @@ public:
 private:
     Ui::MainWindow* ui = nullptr;
     
-    RedMineManager  *m_manager;
+    RedMineManager  *m_manager = nullptr;
     
-    ProjectsModel   m_projectsModel;
-    IssuesModel     m_issuesModel;
-    TimeEntriesModel m_timeEntriesModel;
+    ProjectsModel       m_projectsModel;
+    IssuesModel         m_issuesModel;
+    TimeEntriesModel    m_timeEntriesModel;
+    UsersModel          m_usersModel;
 
 private slots:
     void setProjectData(uint, uint, uint, ProjectVectorPtr);
     void setIssuesData(uint, uint, uint, IssueVectorPtr);
-    void setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr);    
+    void setTimeEntriesData(uint, uint, uint, TimeEntryVectorPtr);
+    void setUsersData(uint,uint,uint,UserVectorPtr);
 };
 
 #endif // MAINWINDOW_H
