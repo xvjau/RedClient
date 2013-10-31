@@ -25,33 +25,6 @@ add_definitions(-std=c++11 -fPIC -fPIE -Wall -Wextra)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
-FILE(GLOB QML_FILES "qml/*.qml")
-
-add_custom_command(
-    OUTPUT qml.cpp
-
-    COMMAND echo ${QML_FILES} > ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-
-    COMMAND sed 's/\\s/\\n/g' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-    COMMAND sed 's/.*\\///g' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-    COMMAND sed 's/^/\\t\\t\\<file\\>qml\\//' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-    COMMAND sed 's/$$/\\<\\/file\\>/' -i ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-
-    COMMAND echo -e '<RCC>\\n\\t<qresource prefix=\"/\">' > qml.qrc
-    COMMAND cat ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp >> qml.qrc
-    COMMAND echo -e '\\t</qresource>\\n</RCC>' >> qml.qrc
-
-    COMMAND rcc qml.qrc > ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp
-
-    COMMAND rm qml.qrc ${CMAKE_CURRENT_BINARY_DIR}/qml.tmp
-
-    DEPENDS ${QML_FILES}
-
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-
-    COMMENT "QML Resources"
-)
-
 set(RedClient_SRCS 
     ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp 
     
@@ -84,3 +57,4 @@ add_library(RedClient ${RedClient_SRCS} ${UI_SRCS})
 
 add_subdirectory(widgets)
 add_subdirectory(systemtray)
+add_subdirectory(qml)
