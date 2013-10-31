@@ -67,16 +67,26 @@ bool UsersModel::setData(const QModelIndex& index, const QVariant& value, int ro
 
 QVariant UsersModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    if (role == Qt::DisplayRole)
     {
-        switch(section)
+        if (orientation == Qt::Horizontal)
         {
-            case 0: return "id";
-            case 1: return "login";
-            case 2: return "firstName";
-            case 3: return "lastName";
-            case 4: return "email";
-            case 5: return "authSourceId";
+            switch(section)
+            {
+                case 0: return "id";
+                case 1: return "login";
+                case 2: return "firstName";
+                case 3: return "lastName";
+                case 4: return "email";
+                case 5: return "authSourceId";
+            }
+        }
+        else
+        {
+            assert(section < m_usersData->size());
+            const auto &row = (*m_usersData)[section];
+            
+            return row.id();
         }
     }
     return QVariant();

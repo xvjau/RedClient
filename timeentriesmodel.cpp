@@ -71,19 +71,29 @@ bool TimeEntriesModel::setData(const QModelIndex& index, const QVariant& value, 
 
 QVariant TimeEntriesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    if (role == Qt::DisplayRole)
     {
-        switch(section)
+        if (orientation == Qt::Horizontal)
         {
-            case 0: return "id";
-            case 1: return "project";
-            case 2: return "comments";
-            case 3: return "activity";
-            case 4: return "createdOn";
-            case 5: return "updatedOn";
-            case 6: return "spentOn";
-            case 7: return "user";
-            case 8: return "issue";
+            switch(section)
+            {
+                case 0: return "id";
+                case 1: return "project";
+                case 2: return "comments";
+                case 3: return "activity";
+                case 4: return "createdOn";
+                case 5: return "updatedOn";
+                case 6: return "spentOn";
+                case 7: return "user";
+                case 8: return "issue";
+            }
+        }
+        else
+        {
+            assert(section <= m_timeEntriesData->size());
+            const auto &row = (*m_timeEntriesData)[section];
+            
+            return row.id();
         }
     }
     return QVariant();

@@ -112,19 +112,22 @@ void ProjectsModel::setProjectData(uint limit, uint offset, uint totalCount, Pro
 
 QVariant ProjectsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole)
     {
-        assert(section < 7);
-        
-        switch(section)
+        if (orientation == Qt::Horizontal)
         {
-            case 0: return tr("id"); 
-            case 1: return tr("createdOn");
-            case 2: return tr("updatedOn");
-            case 3: return tr("identifier");
-            case 4: return tr("name");
-            case 5: return tr("description");
-            case 6: return tr("parentProjectId");
+            assert(section < 7);
+            
+            switch(section)
+            {
+                case 0: return tr("id"); 
+                case 1: return tr("createdOn");
+                case 2: return tr("updatedOn");
+                case 3: return tr("identifier");
+                case 4: return tr("name");
+                case 5: return tr("description");
+                case 6: return tr("parentProjectId");
+            }
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
