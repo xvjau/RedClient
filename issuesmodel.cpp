@@ -99,6 +99,13 @@ QVariant IssuesModel::headerData(int section, Qt::Orientation orientation, int r
                 case 12: return tr("priority");
             }
         }
+        else
+        {
+            assert(section <= m_issuesData->size());
+            const auto &row = (*m_issuesData)[section];
+            
+            return row.id();
+        }
     }
     return QVariant();
 }
