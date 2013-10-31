@@ -31,8 +31,6 @@ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--as-needed -O1"
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 set(RedClient_SRCS 
-    ${CMAKE_CURRENT_BINARY_DIR}/qml.cpp 
-    
     rmobjectsummary.cpp
     rmproject.cpp 
     rmissue.cpp 
