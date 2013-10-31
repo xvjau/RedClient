@@ -54,6 +54,7 @@ MainWindow::MainWindow(RedMineManager* _manager, QWidget* parent, Qt::WindowFlag
     m_manager->listUsers();
     
     ui->tvIssues->setModel(m_issuesProxyModel);
+    ui->tvIssues->setSortingEnabled(true);
 }
 
 void MainWindow::setProjectData(uint, uint, uint, ProjectVectorPtr)
